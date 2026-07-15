@@ -15,34 +15,45 @@ const SCROLL_TARGETS = {
 };
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [activeSection, setActiveSection] = useState("home");
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Update logged-in user
   useEffect(() => {
+    const updateUser = () => {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
 
-  const updateUser = () => {
+    updateUser();
 
-    const storedUser = localStorage.getItem("user");
+    window.addEventListener("storage", updateUser);
 
-    setUser(storedUser ? JSON.parse(storedUser) : null);
+    return () =>
+      window.removeEventListener("storage", updateUser);
+  }, []);
 
-  };
+  // Navbar shadow on scroll
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
 
-  updateUser();
+    window.addEventListener("scroll", onScroll);
 
-  window.addEventListener("storage", updateUser);
+    return () =>
+      window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  return () => window.removeEventListener("storage", updateUser);
-
-}, []);
+  // Close mobile menu after changing page
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  /* Detect visible section */
-
+  // Highlight active section on Home page
   useEffect(() => {
     if (location.pathname !== "/") return;
 
@@ -62,7 +73,8 @@ const Navbar = () => {
 
         if (
           scrollPos >= section.offsetTop &&
-          scrollPos < section.offsetTop + section.offsetHeight
+          scrollPos <
+            section.offsetTop + section.offsetHeight
         ) {
           setActiveSection(id);
           break;
@@ -75,18 +87,21 @@ const Navbar = () => {
     handleScroll();
 
     return () =>
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
   }, [location.pathname]);
 
   const scrollToSection = (id) => {
-    const el = document.getElementById(id);
+    const element = document.getElementById(id);
 
-    if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   const handleSectionClick = (sectionId) => {
@@ -112,15 +127,24 @@ const Navbar = () => {
     } else {
       navigate("/");
     }
-  }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    window.dispatchEvent(new Event("storage"));
+
+    navigate("/");
+  };
 
   return (
     <header
-      className={`navbar ${scrolled ? "navbar-scrolled" : ""
-        }`}
+      className={`navbar ${
+        scrolled ? "navbar-scrolled" : ""
+      }`}
     >
       <div className="container navbar-inner">
-
         <a
           href="/"
           className="navbar-logo"
@@ -130,101 +154,169 @@ const Navbar = () => {
           <span>BloodConnect</span>
         </a>
 
-        <nav className={`navbar-links ${menuOpen ? 'navbar-links-open' : ''}`}>
-          <a href="/" onClick={handleHomeClick} className="navbar-link active-link">Home</a>
-          <button className="navbar-link navbar-link-btn" onClick={() => handleSectionClick(SCROLL_TARGETS.findDonor)}>
-            Find Donor
-          </button>
-          <button className="navbar-link navbar-link-btn" onClick={() => handleSectionClick(SCROLL_TARGETS.requestBlood)}>
-            Request Blood
-          </button>
-          <Link to="/about" className="navbar-link">About Us</Link>
-          <Link to="/contact" className="navbar-link">Contact Us</Link>
-
-          <div className="navbar-auth navbar-auth-mobile">
-  {user ? (
-    <>
-      <Link
-        to="/dashboard"
-        className="btn btn-outline navbar-btn-sm"
-      >
-        Dashboard
-      </Link>
-
-      <button
-        className="btn btn-primary navbar-btn-sm"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-    </>
-  ) : (
-    <>
-      <Link
-        to="/login"
-        className="btn btn-outline navbar-btn-sm"
-      >
-        Login
-      </Link>
-
-      <Link
-        to="/register"
-        className="btn btn-primary navbar-btn-sm"
-      >
-        Register
-      </Link>
-    </>
-  )}
-</div>
-
-        <div className="navbar-auth">
-  {user ? (
-    <>
-      <Link
-        to="/dashboard"
-        className="btn btn-outline navbar-btn-sm"
-      >
-        Dashboard
-      </Link>
-
-      <button
-        className="btn btn-primary navbar-btn-sm"
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-    </>
-  ) : (
-    <>
-      <Link
-        to="/login"
-        className="btn btn-outline navbar-btn-sm"
-      >
-        Login
-      </Link>
-
-      <Link
-        to="/register"
-        className="btn btn-primary navbar-btn-sm"
-      >
-        Register
-      </Link>
-    </>
-  )}
-</div>
+        <nav
+          className={`navbar-links ${
+            menuOpen ? "navbar-links-open" : ""
+          }`}
+        >
+          <NavLink
+            to="/"
+            end
+            onClick={handleHomeClick}
+            className={`navbar-link ${
+              activeSection === "home" &&
+              location.pathname === "/"
+                ? "active-link"
+                : ""
+            }`}
+          >
+            Home
+          </NavLink>
 
           <button
-            className="navbar-toggle"
+            className={`navbar-link navbar-link-btn ${
+              activeSection === "find-donor" &&
+              location.pathname === "/"
+                ? "active-link"
+                : ""
+            }`}
             onClick={() =>
-              setMenuOpen(!menuOpen)
+              handleSectionClick(
+                SCROLL_TARGETS.findDonor
+              )
             }
           >
-            {menuOpen ? <FaTimes /> : <FaBars />}
+            Find Donor
           </button>
 
+          <button
+            className={`navbar-link navbar-link-btn ${
+              activeSection ===
+                "emergency-request" &&
+              location.pathname === "/"
+                ? "active-link"
+                : ""
+            }`}
+            onClick={() =>
+              handleSectionClick(
+                SCROLL_TARGETS.requestBlood
+              )
+            }
+          >
+            Request Blood
+          </button>
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `navbar-link ${
+                isActive ? "active-link" : ""
+              }`
+            }
+          >
+            About Us
+          </NavLink>
+
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `navbar-link ${
+                isActive ? "active-link" : ""
+              }`
+            }
+          >
+            Contact Us
+          </NavLink>
+
+          {/* Mobile Auth */}
+          <div className="navbar-auth navbar-auth-mobile">
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="btn btn-outline navbar-btn-sm"
+                >
+                  Dashboard
+                </Link>
+
+                <button
+                  className="btn btn-primary navbar-btn-sm"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="btn btn-outline navbar-btn-sm"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="btn btn-primary navbar-btn-sm"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+          </div>
+        </nav>
+
+        {/* Desktop Auth */}
+        <div className="navbar-auth">
+          {user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="btn btn-outline navbar-btn-sm"
+              >
+                Dashboard
+              </Link>
+
+              <button
+                className="btn btn-primary navbar-btn-sm"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="btn btn-outline navbar-btn-sm"
+              >
+                Login
+              </Link>
+
+              <Link
+                to="/register"
+                className="btn btn-primary navbar-btn-sm"
+              >
+                Register
+              </Link>
+            </>
+          )}
+        </div>
+
+        <button
+          className="navbar-toggle"
+          onClick={() =>
+            setMenuOpen(!menuOpen)
+          }
+          aria-label="Toggle Menu"
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
     </header>
   );
 };
 
 export default Navbar;
+
+export { SCROLL_TARGETS };
