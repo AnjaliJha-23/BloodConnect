@@ -12,9 +12,27 @@ const SCROLL_TARGETS = {
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [user, setUser] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
 
+  useEffect(() => {
+
+  const updateUser = () => {
+
+    const storedUser = localStorage.getItem("user");
+
+    setUser(storedUser ? JSON.parse(storedUser) : null);
+
+  };
+
+  updateUser();
+
+  window.addEventListener("storage", updateUser);
+
+  return () => window.removeEventListener("storage", updateUser);
+
+}, []);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll)
@@ -63,13 +81,21 @@ const Navbar = () => {
       navigate('/')
     }
   }
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.dispatchEvent(new Event("storage"));
+
+  navigate("/");
+};
 
   return (
     <header className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
       <div className="container navbar-inner">
         <a href="/" className="navbar-logo" onClick={handleHomeClick}>
           <FaHeart className="navbar-logo-icon" />
-          <span>BloodConnect</span>
+          <span id="Blood">Blood</span><span id="Connect">Connect</span>
         </a>
 
         <nav className={`navbar-links ${menuOpen ? 'navbar-links-open' : ''}`}>
@@ -80,19 +106,73 @@ const Navbar = () => {
           <button className="navbar-link navbar-link-btn" onClick={() => handleSectionClick(SCROLL_TARGETS.requestBlood)}>
             Request Blood
           </button>
-          <Link to="/about" className="navbar-link">About Us</Link>
-          <Link to="/contact" className="navbar-link">Contact Us</Link>
+          <Link to="/about" className="navbar-link">About</Link>
+          <Link to="/contact" className="navbar-link">Contact</Link>
 
           <div className="navbar-auth navbar-auth-mobile">
-            <Link to="/login" className="btn btn-outline navbar-btn-sm">Login</Link>
-            <Link to="/register" className="btn btn-primary navbar-btn-sm">Register</Link>
-          </div>
+
+  {user ? (
+    <>
+  <Link
+    to="/dashboard"
+    className="btn btn-outline navbar-btn-sm"
+  >
+    Dashboard
+  </Link>
+
+  <button
+    className="btn btn-primary"
+    onClick={handleLogout}
+  >
+    Logout
+  </button>
+</>
+  ) : (
+    <>
+      <Link to="/login" className="btn btn-outline navbar-btn-sm">
+        Login
+      </Link>
+
+      <Link to="/register" className="btn btn-primary navbar-btn-sm">
+        Register
+      </Link>
+    </>
+  )}
+
+</div>
         </nav>
 
         <div className="navbar-auth">
-          <Link to="/login" className="btn btn-outline navbar-btn-sm">Login</Link>
-          <Link to="/register" className="btn btn-primary navbar-btn-sm">Register</Link>
-        </div>
+
+  {user ? (
+    <>
+  <Link
+    to="/dashboard"
+    className="btn btn-outline navbar-btn-sm"
+  >
+    Dashboard
+  </Link>
+
+  <button
+    className="btn btn-primary navbar-btn-sm"
+    onClick={handleLogout}
+  >
+    Logout
+  </button>
+</>
+  ) : (
+    <>
+      <Link to="/login" className="btn btn-outline navbar-btn-sm">
+        Login
+      </Link>
+
+      <Link to="/register" className="btn btn-primary navbar-btn-sm">
+        Register
+      </Link>
+    </>
+  )}
+
+</div>
 
         <button className="navbar-toggle" onClick={() => setMenuOpen((v) => !v)} aria-label="Toggle menu">
           {menuOpen ? <FaTimes /> : <FaBars />}

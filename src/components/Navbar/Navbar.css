@@ -2,13 +2,12 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: rgba(247, 240, 240, 0.85);
+  background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
   transition: box-shadow var(--transition-medium), border-color var(--transition-medium);
 }
-
 
 .navbar-scrolled {
   box-shadow: 0 4px 20px rgba(30, 41, 59, 0.06);
@@ -29,9 +28,6 @@
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-text-dark);
-}
-.navbar-logo a{
-  color:#ad1515;
 }
 
 .navbar-logo-icon {
@@ -129,4 +125,14 @@
   .navbar-auth-mobile .btn {
     width: 100%;
   }
+}
+.welcome-text{
+
+  font-weight:600;
+
+  color:var(--color-primary);
+
+  margin-right:8px;
+
+  white-space:nowrap;
 }
