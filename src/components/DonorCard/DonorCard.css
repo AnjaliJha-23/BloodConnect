@@ -1,0 +1,73 @@
+.donor-card {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.donor-card:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-6px);
+}
+
+.donor-card-quote-icon {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  color: #FDECEE;
+  font-size: 1.6rem;
+}
+
+.donor-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.donor-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.donor-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.donor-location {
+  font-size: 0.82rem;
+  color: var(--color-text-gray);
+}
+
+.donor-rating {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+}
+
+.star-filled {
+  color: #FBBF24;
+}
+
+.star-empty {
+  color: #E2E8F0;
+}
+
+.donor-message {
+  color: var(--color-text-gray);
+  font-size: 0.94rem;
+  line-height: 1.7;
+}

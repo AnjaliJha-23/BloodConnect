@@ -1,0 +1,135 @@
+.about-hero {
+  padding: 90px 0 60px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F8 100%);
+  text-align: center;
+}
+
+.about-hero-inner {
+  max-width: 720px;
+}
+
+.about-hero-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 18px 0 20px;
+  color: var(--color-text-dark);
+}
+
+.about-hero-subtext {
+  color: var(--color-text-gray);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.mission-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.mv-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  box-shadow: var(--shadow-soft);
+}
+
+.mv-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #FDECEE;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 22px;
+}
+
+.mv-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--color-text-dark);
+}
+
+.mv-card p {
+  color: var(--color-text-gray);
+  line-height: 1.7;
+  font-size: 0.96rem;
+}
+
+.about-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.about-timeline-item {
+  background: #fff;
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+  border-top: 3px solid var(--color-primary);
+}
+
+.about-timeline-year {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.about-timeline-item p {
+  color: var(--color-text-gray);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.why-matters-inner {
+  text-align: left;
+}
+
+.about-cta {
+  background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.about-cta-inner h2 {
+  color: #fff;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.about-cta-inner p {
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 30px;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 960px) {
+  .mission-vision-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-timeline {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .about-timeline {
+    grid-template-columns: 1fr;
+  }
+}

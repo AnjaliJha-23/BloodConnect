@@ -1,0 +1,128 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: box-shadow var(--transition-medium), border-color var(--transition-medium);
+}
+
+.navbar-scrolled {
+  box-shadow: 0 4px 20px rgba(30, 41, 59, 0.06);
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 76px;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+}
+
+.navbar-logo-icon {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.navbar-link {
+  background: none;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
+  position: relative;
+  padding: 4px 0;
+  transition: color var(--transition-fast);
+}
+
+.navbar-link-btn {
+  padding: 4px 0;
+}
+
+.navbar-link:hover {
+  color: var(--color-primary);
+}
+
+.active-link {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-btn-sm {
+  padding: 10px 22px;
+  font-size: 0.92rem;
+}
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  font-size: 1.4rem;
+  color: var(--color-text-dark);
+}
+
+.navbar-auth-mobile {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .navbar-auth {
+    display: none;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-links {
+    position: fixed;
+    top: 76px;
+    right: -100%;
+    height: calc(100vh - 76px);
+    width: 280px;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 36px 28px;
+    box-shadow: -8px 0 24px rgba(0,0,0,0.08);
+    transition: right var(--transition-medium);
+  }
+
+  .navbar-links-open {
+    right: 0;
+  }
+
+  .navbar-auth-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .navbar-auth-mobile .btn {
+    width: 100%;
+  }
+}

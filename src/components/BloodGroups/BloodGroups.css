@@ -1,0 +1,46 @@
+.blood-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 18px;
+}
+
+.blood-group-card {
+  background: #fff;
+  border: 1.5px solid #F1F5F9;
+  border-radius: var(--radius-md);
+  padding: 28px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.blood-group-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-medium);
+}
+
+.blood-group-icon {
+  color: var(--color-primary);
+  font-size: 1.6rem;
+}
+
+.blood-group-label {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-text-dark);
+}
+
+@media (max-width: 960px) {
+  .blood-groups-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .blood-groups-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

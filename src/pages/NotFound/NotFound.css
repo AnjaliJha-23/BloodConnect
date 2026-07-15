@@ -1,0 +1,37 @@
+.not-found {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF8F8 100%);
+  padding: 80px 0;
+}
+
+.not-found-inner {
+  text-align: center;
+}
+
+.not-found-icon {
+  font-size: 3rem;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+
+.not-found-code {
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.not-found-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin: 16px 0 10px;
+}
+
+.not-found-subtext {
+  color: var(--color-text-gray);
+  margin-bottom: 30px;
+}
