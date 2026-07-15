@@ -69,7 +69,7 @@ const Navbar = () => {
       <div className="container navbar-inner">
         <a href="/" className="navbar-logo" onClick={handleHomeClick}>
           <FaHeart className="navbar-logo-icon" />
-          <span id="Blood">Blood</span><span id="Connect">Connect</span>
+          <span>BloodConnect</span>
         </a>
 
         <nav className={`navbar-links ${menuOpen ? 'navbar-links-open' : ''}`}>
@@ -80,8 +80,8 @@ const Navbar = () => {
           <button className="navbar-link navbar-link-btn" onClick={() => handleSectionClick(SCROLL_TARGETS.requestBlood)}>
             Request Blood
           </button>
-          <Link to="/about" className="navbar-link">About</Link>
-          <Link to="/contact" className="navbar-link">Contact</Link>
+          <Link to="/about" className="navbar-link">About Us</Link>
+          <Link to="/contact" className="navbar-link">Contact Us</Link>
 
           <div className="navbar-auth navbar-auth-mobile">
             <Link to="/login" className="btn btn-outline navbar-btn-sm">Login</Link>
