@@ -1,0 +1,52 @@
+.request-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f9fc;
+  padding: 40px;
+}
+
+.request-card {
+  width: 100%;
+  max-width: 650px;
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+.request-card h2 {
+  text-align: center;
+  color: #E53935;
+  margin-bottom: 25px;
+}
+
+.request-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.request-card input,
+.request-card select,
+.request-card textarea {
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.request-card textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.request-card button {
+  background: #E53935;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}

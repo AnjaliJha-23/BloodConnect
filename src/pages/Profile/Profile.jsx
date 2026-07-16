@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import "./Profile.css";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     phone: "",
@@ -60,12 +63,24 @@ function Profile() {
       const token = localStorage.getItem("token");
 
       await api.put("/users/profile", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 
-      alert("Profile Updated Successfully!");
+alert("Profile Updated Successfully!");
+
+// Update localStorage
+const updatedUser = await api.get("/users/profile", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+localStorage.setItem("user", JSON.stringify(updatedUser.data));
+
+// Redirect to Home
+navigate("/");
 
     } catch (err) {
       alert("Error Updating Profile");

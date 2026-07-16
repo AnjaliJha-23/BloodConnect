@@ -49,3 +49,21 @@ exports.updateProfile = async(req,res)=>{
     }
 
 }
+exports.findDonors = async (req, res) => {
+  try {
+    const { bloodGroup, city } = req.query;
+
+    const donors = await User.find({
+      bloodGroup,
+      city,
+      available: true,
+    }).select("-password");
+
+    res.json(donors);
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};

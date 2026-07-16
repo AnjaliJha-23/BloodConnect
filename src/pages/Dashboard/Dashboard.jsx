@@ -8,6 +8,15 @@ function Dashboard() {
 
   const [user, setUser] = useState(null);
 
+  const profileComplete =
+  user &&
+  user.bloodGroup &&
+  user.phone &&
+  user.city &&
+  user.state &&
+  user.age &&
+  user.gender;
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -60,21 +69,47 @@ function Dashboard() {
           <h3>City</h3>
           <p>{user.city || "Not Updated"}</p>
         </div>
+        <div className="card">
+
+  <h3>Profile Status</h3>
+
+  <p
+    style={{
+      color: profileComplete ? "green" : "red",
+      fontWeight: "bold"
+    }}
+  >
+    {profileComplete ? "✅ Complete" : "❌ Incomplete"}
+  </p>
+
+</div>
       </div>
 
       <div className="dashboard-actions">
-        <button onClick={() => navigate("/profile")}>
-          Edit Profile
-        </button>
 
-        <button onClick={() => navigate("/")}>
-          Find Donors
-        </button>
+  <button onClick={() => navigate("/profile")}>
+    Edit Profile
+  </button>
 
-        <button onClick={() => navigate("/")}>
-          Request Blood
-        </button>
-      </div>
+  <button
+    disabled={!profileComplete}
+    onClick={() =>
+  navigate("/", {
+    state: { scrollTo: "find-donor" },
+  })
+}
+  >
+    Find Donors
+  </button>
+
+  <button
+    disabled={!profileComplete}
+    onClick={() => navigate("/request-blood")}
+  >
+    Request Blood
+  </button>
+
+</div>
     </div>
   );
 }

@@ -9,6 +9,8 @@ import Contact from "./pages/Contact/Contact";
 import NotFound from "./pages/NotFound/NotFound";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import RequestBlood from "./pages/RequestBlood/RequestBlood";
+import ProfileProtectedRoute from "./components/ProtectedRoutes/ProfileProtectedRoute";
 
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -39,6 +41,7 @@ function App() {
             <Profile />
             </ProtectedRoute>
           }/>
+          <Route path="/request-blood" element={ <ProtectedRoute> <ProfileProtectedRoute> <RequestBlood /> </ProfileProtectedRoute> </ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
 
           <Route path="*" element={<NotFound />} />
