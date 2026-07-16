@@ -57,14 +57,22 @@ const Navbar = () => {
   useEffect(() => {
     if (location.pathname !== "/") return;
 
+    // We track the inner feature blocks sequentially
     const sections = [
-      "home",
       "find-donor",
       "emergency-request",
     ];
 
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 120;
+      // FIX: Force 'home' highlight instantly when the user is at the top fold of the screen
+      if (window.scrollY < 100) {
+        setActiveSection("home");
+        return;
+      }
+
+      // Buffer clearance padding to accommodate sticky header bounds nicely
+      const scrollPos = window.scrollY + 140;
+      let matched = false;
 
       for (const id of sections) {
         const section = document.getElementById(id);
@@ -73,24 +81,25 @@ const Navbar = () => {
 
         if (
           scrollPos >= section.offsetTop &&
-          scrollPos <
-            section.offsetTop + section.offsetHeight
+          scrollPos < section.offsetTop + section.offsetHeight
         ) {
           setActiveSection(id);
+          matched = true;
           break;
         }
+      }
+
+      // Default fallback state if coordinates slide outside section blocks
+      if (!matched) {
+        setActiveSection("home");
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-
-    handleScroll();
+    handleScroll(); // Trigger immediate check on component mount framework cycles
 
     return () =>
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
+      window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
   const scrollToSection = (id) => {
@@ -280,6 +289,7 @@ const Navbar = () => {
               <button
                 className="btn btn-primary navbar-btn-sm"
                 onClick={handleLogout}
+                type="button"
               >
                 Logout
               </button>
@@ -309,6 +319,7 @@ const Navbar = () => {
             setMenuOpen(!menuOpen)
           }
           aria-label="Toggle Menu"
+          type="button"
         >
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>

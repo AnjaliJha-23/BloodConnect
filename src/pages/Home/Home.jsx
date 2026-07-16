@@ -1,71 +1,63 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from 'react-router-dom'
-import Hero from '../../components/Hero/Hero'
-import Statistics from '../../components/Statistics/Statistics'
-import SearchSection from '../../components/SearchSection/SearchSection'
-import BloodGroups from '../../components/BloodGroups/BloodGroups'
-import Features from '../../components/Features/Features'
-import HowItWorks from '../../components/HowItWorks/HowItWorks'
-import EmergencySection from '../../components/EmergencySection/EmergencySection'
-import Testimonials from '../../components/Testimonials/Testimonials'
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-const Home = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const [ready, setReady] = useState(!location.state?.scrollTo);
-  const scrollToCenter = (id) => {
-    const element = document.getElementById(id);
+import Hero from '../../components/Hero/Hero'; 
+import Statistics from '../../components/Statistics/Statistics';
+import SearchSection from '../../components/SearchSection/SearchSection';
+import EmergencySection from '../../components/EmergencySection/EmergencySection'; 
+import Features from '../../components/Features/Features'; 
 
-    if (!element) return;
-
-    const navbarHeight = 90; // Adjust if your navbar height is different
-
-    const elementTop =
-      element.getBoundingClientRect().top + window.pageYOffset;
-
-    const offset =
-      elementTop -
-      (window.innerHeight / 2 - element.offsetHeight / 2) -
-      navbarHeight / 2;
-
-    window.scrollTo({
-      top: offset,
-      behavior: "smooth",
-    });
-  };
+export default function Home() {
+  const location = useLocation();
 
   useEffect(() => {
-  const target = location.state?.scrollTo;
+    if (location.state && location.state.scrollTo) {
+      const targetId = location.state.scrollTo;
+      
+      window.history.replaceState({}, document.title);
 
-  if (!target) return;
+      const timer = setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          // FIX: Look at which section was clicked and apply the perfect scrolling position
+          if (targetId === 'emergency-request') {
+            // Centers the emergency banner vertically on your screen ("thoda upar")
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            // Keeps the Find Donor card perfectly aligned right at the top layout boundary
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }, 300);
 
-  requestAnimationFrame(() => {
-    scrollToCenter(target);
-
-    setReady(true);
-
-    navigate(location.pathname, {
-      replace: true,
-      state: {},
-    });
-  });
-}, [location.state]);
-if (!ready) return null;
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   return (
-    <> <section id="home">
+    <div style={{ backgroundColor: '#fff5f5', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+      
       <Hero />
-    </section>
-      <Statistics />
-      <SearchSection />
-      <BloodGroups />
-      <Features />
-      <HowItWorks />
-      <EmergencySection />
-      <Testimonials />
-    </>
-  )
+      
+      <div style={{ padding: '2rem 0', margin: '2.5rem 0' }}>
+        <Statistics />
+      </div>
+      
+      {/* Added a scroll clearance buffer so the navbar doesn't clip the card when block: "start" runs */}
+      <div id="find-donor" style={{ scrollMarginTop: '120px', margin: '3rem 0' }}>
+        <SearchSection />
+      </div>
+      
+      <div id="emergency-request" style={{ margin: '3rem 0' }}>
+        <EmergencySection />
+      </div>
+      
+      <div style={{ marginTop: '3rem' }}>
+        <Features />
+      </div>
+
+      {/* Keeps a scroll buffer area at the bottom layout boundary so the center block can execute */}
+      <div style={{ paddingBottom: '12vh' }}></div>
+    </div>
+  );
 }
-
-
-export default Home
