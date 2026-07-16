@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 
-
+import Profile from "./pages/Profile/Profile";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
@@ -35,6 +35,10 @@ function App() {
             }/>
 
           <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<ProtectedRoute>
+            <Profile />
+            </ProtectedRoute>
+          }/>
           <Route path="/register" element={<Register />} />
 
           <Route path="*" element={<NotFound />} />
