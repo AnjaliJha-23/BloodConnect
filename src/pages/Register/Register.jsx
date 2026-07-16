@@ -3,6 +3,7 @@ import api from "../../services/api";
 import "./Register.css";
 import { FaTint } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ function Register() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&^#()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/;
 
   const handleChange = (e) => {
     setFormData({
@@ -20,6 +24,13 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!passwordRegex.test(formData.password)) {
+      alert(
+        "Password must be at least 6 characters long and include:\n\n• One uppercase letter\n• One lowercase letter\n• One number\n• One special character"
+      );
+      return;
+    }
 
     try {
       const res = await api.post("/auth/register", formData);
@@ -36,62 +47,72 @@ function Register() {
       alert(err.response?.data?.message || "Registration Failed");
     }
   };
-
   return (
-  <div className="register-container">
-    <div className="register-card">
+    <div className="register-container">
+      <div className="register-card">
 
-      <h1 className="logo">
+        <h1 className="logo">
           <FaTint />
-        BloodConnect
-      </h1>
-      <p className="subtitle">Become a Blood Donor Today</p>
+          BloodConnect
+        </h1>
+        <p className="subtitle">Become a Blood Donor Today</p>
 
-      <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit} autoComplete="off">
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          autoComplete="off"
-          required
-        />
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name}
+            onChange={handleChange}
+            autoComplete="off"
+            required
+          />
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          autoComplete="off"
-          required
-        />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            autoComplete="off"
+            required
+          />
+          <div className="password-field">
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          autoComplete="new-password"
-          required
-        />
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              autoComplete="current-password"
+              required
+            />
 
-        <button type="submit">
-          Register
-        </button>
+            <span
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
 
-      </form>
+          </div>
 
-      <p className="login-text">
-  Already have an account? <Link to="/login">Login</Link>
-</p>
+          <button type="submit">
+            Register
+          </button>
 
+        </form>
+
+        <p className="login-text">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Register;
