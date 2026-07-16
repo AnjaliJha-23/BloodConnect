@@ -1,3 +1,5 @@
+// 1. Import useEffect from react
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FaBullseye, FaEye, FaHeartbeat, FaArrowRight } from 'react-icons/fa'
@@ -19,6 +21,15 @@ const TIMELINE = [
 ]
 
 const About = () => {
+  // 2. Add this hook to handle scroll behavior upon page mount
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant' // Changes to 'smooth' if you prefer an animated scroll-up effect
+    })
+  }, [])
+
   return (
     <>
       <section className="about-hero">
