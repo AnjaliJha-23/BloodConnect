@@ -20,7 +20,7 @@ const Contact = () => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'instant' // Use 'smooth' if you want an animated scroll up
+      behavior: 'instant' 
     })
   }, [])
 
@@ -88,20 +88,21 @@ const Contact = () => {
                   </div>
                   <div className="contact-field">
                     <label htmlFor="phone">Phone</label>
-                    <input id="phone" name="phone" type="tel" placeholder="Your phone number" value={form.phone} onChange={handleChange} />
+                    <input id="phone" name="phone" type="tel" placeholder="Your phone number" value={form.phone} onChange={handleChange} maxLength={10}
+                      inputMode="numeric" pattern="[0-9]{10}" title="Phone number must contain exactly 10 digits" />
                   </div>
-                </div>
-                <div className="contact-field">
-                  <label htmlFor="email">Email</label>
-                  <input id="email" name="email" type="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required />
-                </div>
-                <div className="contact-field">
-                  <label htmlFor="message">Message</label>
-                  <textarea id="message" name="message" rows="5" placeholder="How can we help?" value={form.message} onChange={handleChange} required />
-                </div>
-                <button type="submit" className="btn btn-primary contact-submit">
-                  Send Message <FaPaperPlane />
-                </button>
+                  <div className="contact-field">
+                    <label htmlFor="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required />
+                  </div>
+                  <div className="contact-field">
+                    <label htmlFor="message">Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="How can we help?" value={form.message} onChange={handleChange} required />
+                  </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary contact-submit">
+                    Send Message <FaPaperPlane />
+                  </button>
               </form>
             )}
           </motion.div>
@@ -114,17 +115,17 @@ const Contact = () => {
             transition={{ duration: 0.55, delay: 0.1 }}
           >
             <div className="contact-map">
-  <iframe
-    title="BloodConnect Location"
-    src="https://www.google.com/maps?q=New+Delhi,+India&output=embed"
-    width="100%"
-    height="100%"
-    style={{ border: 0 }}
-    allowFullScreen=""
-    loading="lazy"
-    referrerPolicy="no-referrer-when-downgrade"
-  ></iframe>
-</div>
+              <iframe
+                title="BloodConnect Location"
+                src="https://www.google.com/maps?q=New+Delhi,+India&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </motion.div>
         </div>
       </section>
