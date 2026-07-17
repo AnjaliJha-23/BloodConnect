@@ -104,10 +104,18 @@ const Contact = () => {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, delay: 0.1 }}
           >
-            <div className="contact-map-placeholder">
-              <FaMapMarkerAlt />
-              <p>Map placeholder — embed Google Maps here</p>
-            </div>
+            <div className="contact-map">
+  <iframe
+    title="BloodConnect Location"
+    src="https://www.google.com/maps?q=New+Delhi,+India&output=embed"
+    width="100%"
+    height="100%"
+    style={{ border: 0 }}
+    allowFullScreen=""
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+  ></iframe>
+</div>
           </motion.div>
         </div>
       </section>

@@ -147,26 +147,24 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-soft);
-  min-height: 320px;
+  min-height: 500px;
+  background: #fff;
 }
 
-.contact-map-placeholder {
+.contact-map {
+  width: 100%;
   height: 100%;
-  min-height: 320px;
-  background: var(--color-bg-light);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--color-text-gray);
-  text-align: center;
-  padding: 20px;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
 
-.contact-map-placeholder svg {
-  font-size: 2.4rem;
-  color: var(--color-primary);
+.contact-map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  border: none;
+  display: block;
 }
 
 @media (max-width: 960px) {
