@@ -12,12 +12,18 @@ mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("MongoDB Connected"))
 .catch(err=>console.log(err));
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/users",require("./routes/userRoutes"));
-app.use("/api/requests",require("./routes/requestRoutes"));
+
 
 const PORT = process.env.PORT || 5000;
+app.get("/", (req, res) => {
+    res.send("Backend Running");
+});
 
-app.listen(PORT,()=>{
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/requests", require("./routes/requestRoutes"));
+
+
+app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
 });

@@ -7,8 +7,11 @@ const {
     login
 } = require("../controllers/authControllers");
 
-router.post("/register",register);
+router.post("/register", register);
+router.post("/login", login);
 
-router.post("/login",login);
+router.get("/test", (req, res) => {
+    res.send("Auth Route Working");
+});
 
 module.exports = router;
