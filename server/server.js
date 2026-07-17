@@ -13,6 +13,8 @@ mongoose.connect(process.env.MONGO_URI)
 .catch(err=>console.log(err));
 
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/users",require("./routes/userRoutes"));
+app.use("/api/requests",require("./routes/requestRoutes"));
 
 const PORT = process.env.PORT || 5000;
 

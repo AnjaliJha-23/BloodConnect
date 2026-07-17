@@ -1,21 +1,90 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaSearch } from 'react-icons/fa'
+import api from "../../services/api";
 import './SearchSection.css'
+import { useNavigate } from "react-router-dom";
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
-const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune']
+const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune','West Bengal']
 
 const SearchSection = () => {
   const [bloodGroup, setBloodGroup] = useState('')
   const [city, setCity] = useState('')
   const [area, setArea] = useState('')
+  const navigate = useNavigate();
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    // Backend integration point: replace with API call to /api/donors/search
-    console.log('Searching donors with:', { bloodGroup, city, area })
+  const [donors, setDonors] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
+
+  const handleSearch = async (e) => {
+
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first.");
+    navigate("/login");
+    return;
   }
+  const profile = await api.get("/users/profile", {
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
+
+const user = profile.data;
+
+if (
+    !user.bloodGroup ||
+    !user.city ||
+    !user.phone ||
+    !user.state ||
+    !user.age ||
+    !user.gender
+) {
+
+    alert("Please complete your profile before searching donors.");
+
+    navigate("/profile");
+
+    return;
+}
+
+  if (!bloodGroup || !city) {
+    alert("Please select Blood Group and City");
+    return;
+  }
+
+  try {
+
+    setLoading(true);
+
+    const res = await api.get("/users/find", {
+      params: {
+        bloodGroup,
+        city,
+      },
+    });
+
+    setDonors(res.data);
+    setHasSearched(true);
+
+  } catch (err) {
+
+    console.log(err);
+
+    alert("Error fetching donors.");
+
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
 
   return (
     <section className="search-section section" id="find-donor">
@@ -72,6 +141,49 @@ const SearchSection = () => {
               <FaSearch /> Search Donor
             </button>
           </form>
+          {loading && <h3>Searching...</h3>}
+
+{hasSearched && !loading && donors.length === 0 && (
+  <p style={{ marginTop: "20px" }}>
+    No donors found.
+  </p>
+)}
+
+{donors.length > 0 && (
+
+  <div className="donor-results">
+
+    <h2>Available Donors</h2>
+
+    {donors.map((donor) => (
+
+      <div className="donor-card" key={donor._id}>
+
+        <h3>{donor.name}</h3>
+
+        <p>
+          <strong>Blood Group:</strong> {donor.bloodGroup}
+        </p>
+
+        <p>
+          <strong>Phone:</strong> {donor.phone}
+        </p>
+
+        <p>
+          <strong>City:</strong> {donor.city}
+        </p>
+
+        <p>
+          <strong>State:</strong> {donor.state}
+        </p>
+
+      </div>
+
+    ))}
+
+  </div>
+
+)}
         </motion.div>
       </div>
     </section>

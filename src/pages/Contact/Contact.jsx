@@ -1,4 +1,5 @@
-import { useState } from 'react'
+// 1. Import useEffect alongside useState
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaClock, FaPaperPlane } from 'react-icons/fa'
 import './Contact.css'
@@ -14,13 +15,21 @@ const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
+  // 2. Add this effect to scroll to top when the component mounts
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant' // Use 'smooth' if you want an animated scroll up
+    })
+  }, [])
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Backend integration point: POST to /api/contact
     console.log('Contact form submitted:', form)
     setSubmitted(true)
   }

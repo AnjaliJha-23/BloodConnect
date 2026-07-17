@@ -67,3 +67,34 @@
     width: 100%;
   }
 }
+.donor-results{
+
+    margin-top:40px;
+}
+
+.donor-card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+    border-left:6px solid #E53935;
+}
+
+.donor-card h3{
+
+    color:#E53935;
+
+    margin-bottom:10px;
+}
+
+.donor-card p{
+
+    margin:5px 0;
+}
