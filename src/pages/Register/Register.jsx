@@ -2,10 +2,11 @@ import { useState } from "react";
 import api from "../../services/api";
 import "./Register.css";
 import { FaTint } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -42,6 +43,8 @@ function Register() {
         email: "",
         password: "",
       });
+
+      navigate("/login");
 
     } catch (err) {
       alert(err.response?.data?.message || "Registration Failed");
