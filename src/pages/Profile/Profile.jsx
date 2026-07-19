@@ -99,11 +99,15 @@ navigate("/");
         <form onSubmit={handleSubmit}>
 
           <input
-            type="text"
+            type="tel"
             name="phone"
             placeholder="Phone Number"
             value={formData.phone || ""}
             onChange={handleChange}
+            maxLength={10}
+            inputMode="numeric"
+            pattern="[0-9]{10}"
+            title="Phone number must contain exactly 10 digits"
           />
 
           <select
