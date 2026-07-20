@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    searchDonors
+    findDonors
 } = require("../controllers/donorControllers");
 
-router.get("/search", searchDonors);
+router.get("/search", findDonors);
 
 module.exports = router;

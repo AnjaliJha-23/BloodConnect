@@ -1,92 +1,99 @@
+/* Container adjustments */
 .search-card {
-  background: var(--color-bg-light);
-  border-radius: var(--radius-lg);
-  padding: 48px;
-  box-shadow: var(--shadow-soft);
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .search-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 32px;
-  color: var(--color-text-dark);
+  margin-bottom: 25px;
+  font-size: 24px;
+  color: #333;
 }
 
-.search-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+/* Horizontal input arrangement layout */
+.form-row {
+  display: flex;
   gap: 20px;
-  align-items: end;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 
 .search-field {
+  flex: 1;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .search-field label {
-  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text-dark);
+  font-size: 14px;
+  color: #444;
 }
 
 .search-field select,
 .search-field input {
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1.5px solid #E2E8F0;
-  background: #fff;
-  font-family: inherit;
-  font-size: 0.95rem;
-  color: var(--color-text-dark);
-  transition: border-color var(--transition-fast);
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+  width: 100%;
 }
 
-.search-field select:focus,
-.search-field input:focus {
-  outline: none;
-  border-color: var(--color-primary);
+.search-btn-wrapper {
+  min-width: 160px;
 }
 
 .search-btn {
-  height: 51px;
-  padding-left: 26px;
-  padding-right: 26px;
+  width: 100%;
+  padding: 12px;
+  height: 47px; /* Matches form inputs height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-@media (max-width: 900px) {
-  .search-card {
-    padding: 32px 24px;
-  }
-  .search-form {
-    grid-template-columns: 1fr;
-  }
-  .search-btn {
-    width: 100%;
-  }
-}
-.donor-results{
-    margin-top:40px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+/* Results grid layout */
+.results-container {
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+  padding-top: 30px;
 }
 
-.donor-card{
-    background:white;
-    border-radius:12px;
-    padding:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
-    transition:.3s;
+.results-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-.donor-card:hover{
-    transform:translateY(-5px);
+.donor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-.donor-card h3{
-    color:#d32f2f;
-    margin-bottom:10px;
+/* Single Donor Card layout adjustments */
+.donor-card {
+  background: #fdfdfd;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s ease;
+}
+
+.donor-card h3 {
+  color: #d93838; /* Accent color for name */
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}
+
+.donor-info p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: #555;
 }
