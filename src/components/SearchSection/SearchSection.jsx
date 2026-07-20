@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FaSearch } from 'react-icons/fa'
 import api from "../../services/api";
 import './SearchSection.css'
+import { useNavigate } from "react-router-dom";
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
 const STATES = ['Delhi', 'Maharashtra', 'Telangana', 'Hyderabad', 'Chennai', 'Pune', 'West Bengal', 'Rajasthan', 'Gujarat', 'Madhya Pradesh', 'Uttar Pradesh', 'Karnataka', 'Tamil Nadu', 'Andhra Pradesh', 'Kerala', 'Odisha', 'Bihar', 'Jharkhand', 'Assam', 'Punjab', 'Haryana', 'Chhattisgarh', 'Uttarakhand', 'Himachal Pradesh', 'Jammu and Kashmir']
@@ -13,6 +14,7 @@ const SearchSection = () => {
   const [state, setState] = useState('') // Fixed: Added missing state hook
   const [city, setCity] = useState('')
   const [area, setArea] = useState('')
+  const navigate = useNavigate();
 
   const [donors, setDonors] = useState([])
   const [loading, setLoading] = useState(false)
@@ -20,7 +22,6 @@ const SearchSection = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
     try {
       setLoading(true);
       setHasSearched(true);
@@ -36,45 +37,6 @@ const SearchSection = () => {
       setLoading(false);
     }
   };
-=======
-
-    setHasSearched(true);
-    setDonors([]);
-
-    try {
-
-        setLoading(true);
-
-        const res = await api.get("/donors/search", {
-
-            params: {
-
-                bloodGroup,
-                city,
-                area
-            }
-
-        });
-
-        setDonors(res.data);
-
-    }
-
-    catch(err){
-
-        console.log(err);
-
-        alert("Unable to fetch donors.");
-
-    }
-
-    finally{
-
-        setLoading(false);
-
-    }
-};
->>>>>>> d1b1af2996c5c5ebf39b7c683d539e1c23de045f
 
   return (
     <section className="search-section section" id="find-donor">
@@ -119,7 +81,6 @@ const SearchSection = () => {
                 </select>
               </div>
 
-<<<<<<< HEAD
               <div className="search-field">
                 <label htmlFor="city">City</label>
                 <select
@@ -133,18 +94,6 @@ const SearchSection = () => {
                   ))}
                 </select>
               </div>
-=======
-            <div className="search-field">
-              <label htmlFor="area">Area</label>
-              <input
-                id="area"
-                type="text"
-                placeholder="Example: Dwarka, Salt Lake"
-                value={area}
-                onChange={(e) => setArea(e.target.value)}
-              />
-            </div>
->>>>>>> d1b1af2996c5c5ebf39b7c683d539e1c23de045f
 
               <div className="search-field">
                 <label htmlFor="area">Area</label>
@@ -164,7 +113,6 @@ const SearchSection = () => {
               </div>
             </div>
           </form>
-<<<<<<< HEAD
 
           {loading && <h3 className="status-text">Searching...</h3>}
 
@@ -197,60 +145,6 @@ const SearchSection = () => {
               </div>
             </div>
           )}
-=======
-          {loading && (
-    <h3 style={{ marginTop: "25px" }}>
-        Searching...
-    </h3>
-)}
-
-{hasSearched && !loading && donors.length === 0 && (
-    <div
-        style={{
-            marginTop: "30px",
-            textAlign: "center",
-            color: "#777",
-            fontSize: "18px",
-        }}
-    >
-        No donors found.
-    </div>
-)}
-
-{donors.length > 0 && (
-    <div className="donor-results">
-
-        <h2>Available Donors ({donors.length})</h2>
-
-        {donors.map((donor) => (
-
-            <div className="donor-card" key={donor._id}>
-
-                <h3>{donor.name}</h3>
-
-                <p>
-                    <strong>Blood Group:</strong> {donor.bloodGroup}
-                </p>
-
-                <p>
-                    <strong>Phone:</strong> {donor.phone}
-                </p>
-
-                <p>
-                    <strong>City:</strong> {donor.city}
-                </p>
-
-                <p>
-                    <strong>State:</strong> {donor.state}
-                </p>
-
-            </div>
-
-        ))}
-
-    </div>
-)}
->>>>>>> d1b1af2996c5c5ebf39b7c683d539e1c23de045f
         </motion.div>
       </div>
     </section>

@@ -1,11 +1,10 @@
 const express = require("express");
-
 const router = express.Router();
 
-const {
-    findDonors
-} = require("../controllers/donorControllers");
+// Destructure the exact exported function name
+const { searchDonors } = require("../controllers/donorControllers");
 
-router.get("/search", findDonors);
+// Line 9: This will now receive a valid function instead of undefined
+router.get("/search", searchDonors);
 
 module.exports = router;
