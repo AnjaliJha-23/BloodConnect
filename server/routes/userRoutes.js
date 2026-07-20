@@ -7,13 +7,10 @@ const auth = require("../middleware/authMiddleware");
 const {
   getProfile,
   updateProfile,
-  findDonors,
 } = require("../controllers/userController");
 
-router.get("/profile",auth,getProfile);
+router.get("/profile", auth, getProfile);
 
-router.put("/profile",auth,updateProfile);
-
-router.get("/find", findDonors);
+router.put("/profile", auth, updateProfile);
 
 module.exports = router;

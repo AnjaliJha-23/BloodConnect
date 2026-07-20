@@ -26,15 +26,16 @@ exports.updateProfile = async(req,res)=>{
 
         const updatedUser = await User.findByIdAndUpdate(
 
-            req.user.id,
+    req.user.id,
 
-            req.body,
+    req.body,
 
-            {
-                new:true
-            }
+    {
+        returnDocument: "after",
+        runValidators: true
+    }
 
-        ).select("-password");
+).select("-password");
 
         res.json(updatedUser);
 
@@ -49,23 +50,23 @@ exports.updateProfile = async(req,res)=>{
     }
 
 }
-exports.findDonors = async (req, res) => {
-  try {
-    const { bloodGroup, city } = req.query;
+// exports.findDonors = async (req, res) => {
+//   try {
+//     const { bloodGroup, city } = req.query;
 
-    const donors = await User.find({
-      bloodGroup,
-      city,
-      available: true,
-    }).select("-password");
+//     const donors = await User.find({
+//       bloodGroup,
+//       city,
+//       available: true,
+//     }).select("-password");
 
-    res.json(donors);
+//     res.json(donors);
 
-  } catch (err) {
-    res.status(500).json({
-      message: "Server Error ",
+//   } catch (err) {
+//     res.status(500).json({
+//       message: "Server Error ",
 
-      
-    });
-  }
-};
+
+//     });
+//   }
+// };
