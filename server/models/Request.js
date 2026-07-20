@@ -42,6 +42,18 @@ const requestSchema = new mongoose.Schema({
         default:""
     },
 
+    status:{
+    type:String,
+    enum:["Open","Completed"],
+    default:"Open"
+},
+
+    responses:[
+    {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
+],
     createdBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"

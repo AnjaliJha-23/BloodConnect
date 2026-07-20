@@ -1,0 +1,65 @@
+.myrequests{
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:40px 20px;
+
+}
+
+.myrequests h1{
+
+    text-align:center;
+
+    color:#c62828;
+
+    margin-bottom:30px;
+
+}
+
+.request-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+    margin-bottom:25px;
+
+}
+
+.request-card h2{
+
+    color:#c62828;
+
+}
+
+.request-card button{
+
+    margin-right:10px;
+
+    margin-top:15px;
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    background:#c62828;
+
+    color:white;
+
+}
+
+.delete-btn{
+
+    background:#555;
+
+}

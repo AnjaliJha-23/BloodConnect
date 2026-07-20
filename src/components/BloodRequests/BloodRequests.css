@@ -1,0 +1,79 @@
+.blood-requests{
+
+    padding:60px 20px;
+
+}
+
+.blood-requests h2{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+    color:#d32f2f;
+
+}
+
+.request-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+    gap:25px;
+
+}
+
+.request-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.request-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.request-card h3{
+
+    color:#d32f2f;
+
+    margin-bottom:15px;
+
+}
+.respond-btn{
+
+    width:100%;
+    margin-top:15px;
+    padding:12px;
+
+    background:#e63946;
+    color:white;
+
+    border:none;
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:600;
+
+    transition:0.3s;
+
+}
+
+.respond-btn:hover{
+
+    background:#c1121f;
+
+}

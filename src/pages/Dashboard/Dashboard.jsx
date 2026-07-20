@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
+
+import MyRequests from "../../components/MyRequests/MyRequests";
+import WelcomeBanner from "../../components/dashboard/WelcomeBanner";
+import DashboardLayout from "../../components/dashboard/DashboardLayout";
+
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -9,13 +14,13 @@ function Dashboard() {
   const [user, setUser] = useState(null);
 
   const profileComplete =
-  user &&
-  user.bloodGroup &&
-  user.phone &&
-  user.city &&
-  user.state &&
-  user.age &&
-  user.gender;
+    user &&
+    user.bloodGroup &&
+    user.phone &&
+    user.city &&
+    user.state &&
+    user.age &&
+    user.gender;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -38,80 +43,25 @@ function Dashboard() {
   }, []);
 
   if (!user) {
-    return <h2 style={{ textAlign: "center", marginTop: "50px" }}>Loading...</h2>;
+    return (
+      <h2 style={{ textAlign: "center", marginTop: "50px" }}>
+        Loading...
+      </h2>
+    );
   }
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-header">
-        <h1>Welcome, {user.name} 👋</h1>
+  <div className="dashboard">
 
-        <p>Thank you for being part of BloodConnect.</p>
-      </div>
+    <WelcomeBanner user={user} />
 
-      <div className="dashboard-cards">
-        <div className="card">
-          <h3>Name</h3>
-          <p>{user.name}</p>
-        </div>
+    <DashboardLayout
+      user={user}
+      profileComplete={profileComplete}
+    />
 
-        <div className="card">
-          <h3>Email</h3>
-          <p>{user.email}</p>
-        </div>
-
-        <div className="card">
-          <h3>Blood Group</h3>
-          <p>{user.bloodGroup || "Not Updated"}</p>
-        </div>
-
-        <div className="card">
-          <h3>City</h3>
-          <p>{user.city || "Not Updated"}</p>
-        </div>
-        <div className="card">
-
-  <h3>Profile Status</h3>
-
-  <p
-    style={{
-      color: profileComplete ? "green" : "red",
-      fontWeight: "bold"
-    }}
-  >
-    {profileComplete ? "✅ Complete" : "❌ Incomplete"}
-  </p>
-
-</div>
-      </div>
-
-      <div className="dashboard-actions">
-
-  <button onClick={() => navigate("/profile")}>
-    Edit Profile
-  </button>
-
-  <button
-    disabled={!profileComplete}
-    onClick={() =>
-  navigate("/", {
-    state: { scrollTo: "find-donor" },
-  })
-}
-  >
-    Find Donors
-  </button>
-
-  <button
-    disabled={!profileComplete}
-    onClick={() => navigate("/request-blood")}
-  >
-    Request Blood
-  </button>
-
-</div>
-    </div>
-  );
+  </div>
+);
 }
 
 export default Dashboard;

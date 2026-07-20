@@ -6,6 +6,7 @@ import Statistics from '../../components/Statistics/Statistics';
 import SearchSection from '../../components/SearchSection/SearchSection';
 import EmergencySection from '../../components/EmergencySection/EmergencySection'; 
 import Features from '../../components/Features/Features'; 
+import BloodRequests from "../../components/BloodRequests/BloodRequests";
 
 export default function Home() {
   const location = useLocation();
@@ -51,7 +52,12 @@ export default function Home() {
       <div id="emergency-request" style={{ margin: '3rem 0' }}>
         <EmergencySection />
       </div>
-      
+
+    {/* Blood Requests Feed */}
+      <div style={{ margin: '3rem 0' }}>
+        <BloodRequests />
+      </div>
+
       <div style={{ marginTop: '3rem' }}>
         <Features />
       </div>

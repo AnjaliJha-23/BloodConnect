@@ -43,14 +43,19 @@ const userSchema = new mongoose.Schema({
     },
 
     state:{
-        type:String,
-        default:""
-    },
+    type:String,
+    default:""
+},
 
-    available:{
-        type:Boolean,
-        default:true
-    }
+area:{
+    type:String,
+    default:""
+},
+
+available:{
+    type:Boolean,
+    default:true
+}
 
 },{
     timestamps:true
