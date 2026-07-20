@@ -20,69 +20,41 @@ const SearchSection = () => {
 
   const handleSearch = async (e) => {
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const token = localStorage.getItem("token");
+    try {
 
-  if (!token) {
-    alert("Please login first.");
-    navigate("/login");
-    return;
-  }
-  const profile = await api.get("/users/profile", {
-    headers: {
-        Authorization: `Bearer ${token}`
+        setLoading(true);
+
+        const res = await api.get("/donors/search", {
+
+            params: {
+
+                bloodGroup,
+                city,
+                area
+
+            }
+
+        });
+
+        setDonors(res.data);
+
     }
-});
 
-const user = profile.data;
+    catch(err){
 
-if (
-    !user.bloodGroup ||
-    !user.city ||
-    !user.phone ||
-    !user.state ||
-    !user.age ||
-    !user.gender
-) {
+        console.log(err);
 
-    alert("Please complete your profile before searching donors.");
+        alert("Unable to fetch donors.");
 
-    navigate("/profile");
+    }
 
-    return;
-}
+    finally{
 
-  if (!bloodGroup || !city) {
-    alert("Please select Blood Group and City");
-    return;
-  }
+        setLoading(false);
 
-  try {
-
-    setLoading(true);
-
-    const res = await api.get("/users/find", {
-      params: {
-        bloodGroup,
-        city,
-      },
-    });
-
-    setDonors(res.data);
-    setHasSearched(true);
-
-  } catch (err) {
-
-    console.log(err);
-
-    alert("Error fetching donors.");
-
-  } finally {
-
-    setLoading(false);
-
-  }
+    }
 
 };
 

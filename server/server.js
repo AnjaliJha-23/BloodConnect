@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/requests", require("./routes/requestRoutes"));
-
+app.use("/api/donors", require("./routes/donorRoutes"));
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
