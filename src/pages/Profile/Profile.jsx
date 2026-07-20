@@ -14,6 +14,7 @@ function Profile() {
     gender: "",
     city: "",
     state: "",
+    area: "",
     available: true,
   });
 
@@ -158,6 +159,15 @@ navigate("/");
             name="state"
             placeholder="State"
             value={formData.state || ""}
+            onChange={handleChange}
+          />
+
+          <input
+
+            type="text"
+            name="area"
+            placeholder="Example: Dwarka, Salt Lake, Koramangala"
+            value={formData.area || ""}
             onChange={handleChange}
           />
 

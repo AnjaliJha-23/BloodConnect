@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import { FaSearch } from 'react-icons/fa'
 import api from "../../services/api";
 import './SearchSection.css'
-import { useNavigate } from "react-router-dom";
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
 const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune','West Bengal','Rajasthan','Gujarat','Madhya Pradesh','Uttar Pradesh','Karnataka','Tamil Nadu','Andhra Pradesh','Kerala','Odisha','Bihar','Jharkhand','Assam','Punjab','Haryana','Chhattisgarh','Uttarakhand','Himachal Pradesh','Jammu and Kashmir']
@@ -12,7 +11,6 @@ const SearchSection = () => {
   const [bloodGroup, setBloodGroup] = useState('')
   const [city, setCity] = useState('')
   const [area, setArea] = useState('')
-  const navigate = useNavigate();
 
   const [donors, setDonors] = useState([])
   const [loading, setLoading] = useState(false)
@@ -21,6 +19,9 @@ const SearchSection = () => {
   const handleSearch = async (e) => {
 
     e.preventDefault();
+
+    setHasSearched(true);
+    setDonors([]);
 
     try {
 
@@ -33,7 +34,6 @@ const SearchSection = () => {
                 bloodGroup,
                 city,
                 area
-
             }
 
         });
@@ -55,7 +55,6 @@ const SearchSection = () => {
         setLoading(false);
 
     }
-
 };
 
   return (
@@ -103,7 +102,7 @@ const SearchSection = () => {
               <input
                 id="area"
                 type="text"
-                placeholder="Enter area / locality"
+                placeholder="Example: Dwarka, Salt Lake"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
               />
@@ -113,48 +112,57 @@ const SearchSection = () => {
               <FaSearch /> Search Donor
             </button>
           </form>
-          {loading && <h3>Searching...</h3>}
+          {loading && (
+    <h3 style={{ marginTop: "25px" }}>
+        Searching...
+    </h3>
+)}
 
 {hasSearched && !loading && donors.length === 0 && (
-  <p style={{ marginTop: "20px" }}>
-    No donors found.
-  </p>
+    <div
+        style={{
+            marginTop: "30px",
+            textAlign: "center",
+            color: "#777",
+            fontSize: "18px",
+        }}
+    >
+        No donors found.
+    </div>
 )}
 
 {donors.length > 0 && (
+    <div className="donor-results">
 
-  <div className="donor-results">
+        <h2>Available Donors ({donors.length})</h2>
 
-    <h2>Available Donors</h2>
+        {donors.map((donor) => (
 
-    {donors.map((donor) => (
+            <div className="donor-card" key={donor._id}>
 
-      <div className="donor-card" key={donor._id}>
+                <h3>{donor.name}</h3>
 
-        <h3>{donor.name}</h3>
+                <p>
+                    <strong>Blood Group:</strong> {donor.bloodGroup}
+                </p>
 
-        <p>
-          <strong>Blood Group:</strong> {donor.bloodGroup}
-        </p>
+                <p>
+                    <strong>Phone:</strong> {donor.phone}
+                </p>
 
-        <p>
-          <strong>Phone:</strong> {donor.phone}
-        </p>
+                <p>
+                    <strong>City:</strong> {donor.city}
+                </p>
 
-        <p>
-          <strong>City:</strong> {donor.city}
-        </p>
+                <p>
+                    <strong>State:</strong> {donor.state}
+                </p>
 
-        <p>
-          <strong>State:</strong> {donor.state}
-        </p>
+            </div>
 
-      </div>
+        ))}
 
-    ))}
-
-  </div>
-
+    </div>
 )}
         </motion.div>
       </div>

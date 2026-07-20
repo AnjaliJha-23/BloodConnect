@@ -1,0 +1,43 @@
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.summary-card{
+    background:#fff;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+
+    transition:0.3s ease;
+    cursor:pointer;
+}
+
+.summary-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 28px rgba(0,0,0,0.12);
+}
+
+.summary-card h3{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.summary-card h3 svg{
+    color:#E53935;
+}
+
+.summary-card p{
+    margin-top:15px;
+    font-size:28px;
+    font-weight:700;
+    color:#E53935;
+}
+@media(max-width:768px){
+
+.summary-grid{
+    grid-template-columns:1fr;
+}
+
+}
