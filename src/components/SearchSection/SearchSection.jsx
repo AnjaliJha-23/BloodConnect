@@ -6,7 +6,7 @@ import './SearchSection.css'
 import { useNavigate } from "react-router-dom";
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
-const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune','West Bengal']
+const CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune','West Bengal','Rajasthan','Gujarat','Madhya Pradesh','Uttar Pradesh','Karnataka','Tamil Nadu','Andhra Pradesh','Kerala','Odisha','Bihar','Jharkhand','Assam','Punjab','Haryana','Chhattisgarh','Uttarakhand','Himachal Pradesh','Jammu and Kashmir']
 
 const SearchSection = () => {
   const [bloodGroup, setBloodGroup] = useState('')
