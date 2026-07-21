@@ -1,79 +1,304 @@
-.blood-requests{
-
-    padding:60px 20px;
-
+.blood-requests {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.blood-requests h2{
-
-    text-align:center;
-
-    margin-bottom:40px;
-
-    color:#d32f2f;
-
+.blood-requests h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #e63946;
+  font-size: 2rem;
 }
 
-.request-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-
-    gap:25px;
-
+.loading-text {
+  text-align: center;
+  margin-top: 50px;
+  color: #666;
 }
 
-.request-card{
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:15px;
-
-    box-shadow:0 10px 20px rgba(0,0,0,.08);
-
-    transition:.3s;
-
+/* Filters Layout */
+.filters-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.request-card:hover{
-
-    transform:translateY(-6px);
-
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
 }
 
-.request-card h3{
-
-    color:#d32f2f;
-
-    margin-bottom:15px;
-
-}
-.respond-btn{
-
-    width:100%;
-    margin-top:15px;
-    padding:12px;
-
-    background:#e63946;
-    color:white;
-
-    border:none;
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-size:15px;
-    font-weight:600;
-
-    transition:0.3s;
-
+.filter-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
 }
 
-.respond-btn:hover{
+.filter-group select,
+.filter-group input {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
 
-    background:#c1121f;
+.filter-group select:focus,
+.filter-group input:focus {
+  border-color: #e63946;
+}
 
+/* Table / List Container */
+.requests-list-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.requests-table-wrapper {
+  overflow-x: auto;
+}
+
+.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.requests-table th,
+.requests-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.92rem;
+  vertical-align: middle;
+}
+
+.requests-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.patient-name-cell {
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+/* Completed Row Styling */
+.row-completed {
+  background-color: #f8fafc;
+  opacity: 0.75;
+}
+
+/* Badges */
+.blood-badge {
+  background: #ffe5e5;
+  color: #d32f2f;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+.hospital-info,
+.reason-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hospital-info small,
+.reason-info small {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.status-pending {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.status-approved {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+
+.status-completed {
+  background-color: #e2e8f0;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* Respond & Action Buttons */
+.respond-btn {
+  padding: 8px 14px;
+  background: #e63946;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.respond-btn:hover {
+  background: #c1121f;
+  transform: translateY(-1px);
+}
+
+.completed-action-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #e2e8f0;
+  color: #64748b;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.no-requests {
+  padding: 40px;
+  text-align: center;
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* Pagination Controls */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+}
+
+.pagination-btn {
+  padding: 8px 16px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #e63946;
+  color: white;
+  border-color: #e63946;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 6px;
+}
+
+.pagination-number {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pagination-number.active {
+  background: #e63946;
+  color: white;
+  border-color: #e63946;
+}
+
+.pagination-number:hover:not(.active) {
+  background: #f1f5f9;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* Open Status Badge */
+.status-open {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+/* Pending Status Badge */
+.status-pending {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+/* Approved Status Badge */
+.status-approved {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+
+/* Completed Status Badge */
+.status-completed {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* Completed Row Styling */
+.row-completed {
+  background-color: #f8fafc;
+  opacity: 0.8;
+}
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+  }
 }

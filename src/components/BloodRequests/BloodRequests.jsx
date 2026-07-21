@@ -3,171 +3,315 @@ import api from "../../services/api";
 import "./BloodRequests.css";
 import toast from "react-hot-toast";
 
-// State to Cities mapping
-const stateCityData = {
-  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati", "Kakinada", "Nellore", "Kurnool"],
-  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang"],
-  "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia"],
-  "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga"],
-  "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon"],
-  "Goa": ["Panaji", "Margao", "Vasco da Gama", "Mapusa"],
-  "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar"],
-  "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Karnal", "Hisar", "Rohtak"],
-  "Himachal Pradesh": ["Shimla", "Dharamshala", "Mandi", "Solan", "Kullu"],
-  "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro", "Hazaribagh"],
-  "Karnataka": ["Bengaluru", "Mysuru", "Mangaluru", "Hubballi", "Belagavi", "Davangere", "Ballari"],
-  "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Thrissur", "Kollam", "Kannur"],
-  "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain", "Sagar"],
-  "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Aurangabad", "Solapur", "Amravati"],
-  "Manipur": ["Imphal", "Churachandpur", "Thoubal"],
-  "Meghalaya": ["Shillong", "Tura", "Jowai"],
-  "Mizoram": ["Aizawl", "Lunglei", "Champhai"],
-  "Nagaland": ["Kohima", "Dimapur", "Mokokchung"],
-  "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Berhampur", "Sambalpur"],
-  "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali"],
-  "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Bikaner", "Ajmer", "Bhilwara"],
-  "Sikkim": ["Gangtok", "Namchi", "Gyalshing"],
-  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Erode"],
-  "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Khammam"],
-  "Tripura": ["Agartala", "Udaipur", "Dharmanagar"],
-  "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Agra", "Noida", "Ghaziabad", "Prayagraj", "Meerut"],
-  "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani", "Rishikesh"],
-  "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Asansol", "Siliguri", "Kharagpur"],
-  "Delhi / NCR": ["New Delhi", "North Delhi", "South Delhi", "East Delhi", "West Delhi"]
+// List of States
+const STATES = [
+  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
+  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
+  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi / NCR"
+];
+
+// Blood Compatibility Matrix: [Donor Group] -> [Allowed Recipient Groups]
+const COMPATIBILITY_MAP = {
+  "O-": ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"], // Universal Donor
+  "O+": ["O+", "A+", "B+", "AB+"],
+  "A-": ["A-", "A+", "AB-", "AB+"],
+  "A+": ["A+", "AB+"],
+  "B-": ["B-", "B+", "AB-", "AB+"],
+  "B+": ["B+", "AB+"],
+  "AB-": ["AB-", "AB+"],
+  "AB+": ["AB+"]
 };
 
 function BloodRequests() {
   const [requests, setRequests] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Filter States
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
-  // Fetch all active requests
-  const fetchRequests = async () => {
+  // Pagination State (5 items per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Fetch Requests & Current User Profile
+  const fetchData = async () => {
     try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+
+      // Fetch requests
       const res = await api.get("/requests");
       setRequests(res.data);
+
+      // Fetch user profile if logged in
+      if (token) {
+        try {
+          const profileRes = await api.get("/users/profile", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUserProfile(profileRes.data);
+        } catch (pErr) {
+          console.warn("User profile could not be fetched", pErr);
+        }
+      }
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      toast.error("Failed to fetch blood requests.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRequests();
+    fetchData();
   }, []);
 
-  // Handle State Change -> Reset city when state changes
-  const handleStateChange = (e) => {
-    setSelectedState(e.target.value);
-    setSelectedCity(""); // Reset city selection
-  };
-
-  // Filter requests based on selected State & City
+  // Filter requests based on selected State & City text search
   const filteredRequests = requests.filter((request) => {
     const matchesState = selectedState ? request.state === selectedState : true;
-    const matchesCity = selectedCity ? request.city === selectedCity : true;
+    const matchesCity = selectedCity
+      ? request.city?.toLowerCase().includes(selectedCity.toLowerCase())
+      : true;
     return matchesState && matchesCity;
   });
 
-  // Respond to a blood request
-  const handleRespond = async (id) => {
+  // Calculate Pagination Slices
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
+  // Check blood compatibility
+  const checkCompatibility = (donorBloodGroup, recipientBloodGroup) => {
+    if (!donorBloodGroup || !recipientBloodGroup) return false;
+    const allowedRecipients = COMPATIBILITY_MAP[donorBloodGroup] || [];
+    return allowedRecipients.includes(recipientBloodGroup);
+  };
+
+  // Respond to a blood request with Compatibility Validation
+  const handleRespond = async (request) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to respond to requests.");
+      return;
+    }
+
+    const donorBloodGroup = userProfile?.bloodGroup;
+    const recipientBloodGroup = request.bloodGroup;
+
+    if (donorBloodGroup) {
+      const isCompatible = checkCompatibility(donorBloodGroup, recipientBloodGroup);
+
+      if (!isCompatible) {
+        toast.error(
+          `You are not compatible! Your blood group is (${donorBloodGroup}), but patient needs (${recipientBloodGroup}).`,
+          { duration: 5000 }
+        );
+        return;
+      }
+    }
+
     try {
       await api.put(
-        `/requests/${id}/respond`,
+        `/requests/${request._id}/respond`,
         {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       toast.success("Response Sent Successfully ❤️");
-      fetchRequests(); // Refresh requests
+      fetchData(); // Refresh requests list
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed");
+      toast.error(err.response?.data?.message || "Failed to submit response.");
     }
   };
 
   if (loading) {
-    return <h2>Loading Requests...</h2>;
+    return <h2 className="loading-text">Loading Requests...</h2>;
   }
 
   return (
     <section className="blood-requests">
       <h2>🩸 Active Blood Requests</h2>
 
-      
+      {/* Filter Controls */}
+      <div className="filters-container">
+        <div className="filter-group">
+          <label htmlFor="state-select">Filter by State:</label>
+          <select
+            id="state-select"
+            value={selectedState}
+            onChange={(e) => {
+              setSelectedState(e.target.value);
+              setCurrentPage(1); // Reset page on filter
+            }}
+          >
+            <option value="">All States</option>
+            {STATES.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Requests Grid */}
-      <div className="request-grid">
+        <div className="filter-group">
+          <label htmlFor="city-input">Filter by City:</label>
+          <input
+            id="city-input"
+            type="text"
+            placeholder="Type city name..."
+            value={selectedCity}
+            onChange={(e) => {
+              setSelectedCity(e.target.value);
+              setCurrentPage(1); // Reset page on filter
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Requests List View */}
+      <div className="requests-list-container">
         {filteredRequests.length > 0 ? (
-          filteredRequests.map((request) => (
-            <div className="request-card" key={request._id}>
-              <h3>{request.patientName}</h3>
+          <>
+            <div className="requests-table-wrapper">
+              <table className="requests-table">
+                <thead>
+                  <tr>
+                    <th>Patient</th>
+                    <th>Blood Group</th>
+                    <th>Units</th>
+                    <th>Hospital & Location</th>
+                    <th>Reason / Condition</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentRequests.map((request) => {
+                    // Extract and normalize status from MongoDB
+                    const rawStatus = request.status || (request.isCompleted ? "Completed" : "Open");
+                    const normalizedStatus = String(rawStatus).trim().toLowerCase();
 
-              <p>
-                <strong>🩸 Blood Group:</strong> {request.bloodGroup}
-              </p>
+                    // Check if status represents a completed request
+                    const isCompleted = normalizedStatus === "completed" || request.isCompleted === true;
 
-              <p>
-                <strong>🏥 Hospital:</strong> {request.hospital}
-              </p>
+                    // Display label formatting
+                    const displayStatus = isCompleted
+                      ? "Completed"
+                      : rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1);
 
-              {request.state && (
-                <p>
-                  <strong>🗺️ State:</strong> {request.state}
-                </p>
-              )}
-
-              <p>
-                <strong>📍 City:</strong> {request.city}
-              </p>
-
-              <p>
-                <strong>🩸 Units Required:</strong> {request.units}
-              </p>
-
-              <p>
-                <strong>⚠️ Patient Condition:</strong> {request.condition}
-              </p>
-
-              <p>
-                <strong>📋 Reason:</strong>{" "}
-                {request.reason === "Other"
-                  ? request.otherReason
-                  : request.reason}
-              </p>
-
-              <p>
-                <strong>📞 Contact:</strong> {request.contact}
-              </p>
-
-              {request.message && (
-                <p>
-                  <strong>📝 Details:</strong> {request.message}
-                </p>
-              )}
-
-              <p>
-                <strong>❤️ Responses:</strong>{" "}
-                {request.responses?.length || 0}
-              </p>
-
-              <button
-                className="respond-btn"
-                onClick={() => handleRespond(request._id)}
-              >
-                ❤️ I Can Donate
-              </button>
+                    return (
+                      <tr
+                        key={request._id}
+                        className={isCompleted ? "row-completed" : ""}
+                      >
+                        <td className="patient-name-cell">
+                          <strong>{request.patientName}</strong>
+                        </td>
+                        <td>
+                          <span className="blood-badge">{request.bloodGroup}</span>
+                        </td>
+                        <td>
+                          <strong>{request.units}</strong> Unit(s)
+                        </td>
+                        <td>
+                          <div className="hospital-info">
+                            <strong>{request.hospital}</strong>
+                            <small>{request.city}, {request.state}</small>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="reason-info">
+                            <span>
+                              {request.reason === "Other"
+                                ? request.otherReason
+                                : request.reason}
+                            </span>
+                            <small>Condition: {request.condition}</small>
+                          </div>
+                        </td>
+                        <td>{request.contact}</td>
+                        <td>
+                          {/* Dynamic Status Badge */}
+                          <span className={`status-badge status-${normalizedStatus}`}>
+                            {displayStatus}
+                          </span>
+                        </td>
+                        <td>
+                          {isCompleted ? (
+                            <span className="completed-action-btn">
+                              ✓ Completed
+                            </span>
+                          ) : (
+                            <button
+                              className="respond-btn"
+                              onClick={() => handleRespond(request)}
+                            >
+                              ❤️ I Can Donate
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-          ))
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="pagination-container">
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  &laquo; Prev
+                </button>
+
+                <div className="pagination-numbers">
+                  {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                    (pageNum) => (
+                      <button
+                        key={pageNum}
+                        className={`pagination-number ${currentPage === pageNum ? "active" : ""
+                          }`}
+                        onClick={() => handlePageChange(pageNum)}
+                      >
+                        {pageNum}
+                      </button>
+                    )
+                  )}
+                </div>
+
+                <button
+                  className="pagination-btn"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next &raquo;
+                </button>
+              </div>
+            )}
+          </>
         ) : (
-          <p className="no-requests">No blood requests found for the selected location.</p>
+          <p className="no-requests">
+            No blood requests found for the selected location.
+          </p>
         )}
       </div>
     </section>
