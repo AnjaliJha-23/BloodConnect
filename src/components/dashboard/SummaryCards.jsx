@@ -6,7 +6,7 @@ import {
   FaHeartbeat,
 } from "react-icons/fa";
 
-function SummaryCards({ user }) {
+function SummaryCards({ user, requestsMade }) {
   return (
     <div className="summary-grid">
 
@@ -31,7 +31,7 @@ function SummaryCards({ user }) {
             <FaClipboardList />
             Requests Made
         </h3>
-        <p>--</p>
+        <p>{requestsMade}</p>
       </div>
 
       <div className="summary-card">

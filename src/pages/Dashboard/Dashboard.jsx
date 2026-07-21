@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 
-import MyRequests from "../../components/MyRequests/MyRequests";
 import WelcomeBanner from "../../components/dashboard/WelcomeBanner";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
 
