@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 import SummaryCards from "./SummaryCards";
 import QuickActions from "./QuickActions";
-import RecentRequests from "./RecentRequests";
+import DonationTip from "./DonationTip";
 import "./DashboardLayout.css";
 
 function DashboardLayout({ user, profileComplete }) {
@@ -18,7 +18,7 @@ function DashboardLayout({ user, profileComplete }) {
           profileComplete={profileComplete}
         />
 
-        <RecentRequests />
+        <DonationTip />
 
       </div>
 
