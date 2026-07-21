@@ -6,65 +6,65 @@ import "./RequestBlood.css";
 
 function RequestBlood() {
 
-    const [formData,setFormData] = useState({
+    const [formData, setFormData] = useState({
 
-        patientName:"",
-        bloodGroup:"",
-        hospital:"",
-        city:"",
-        units:"",
-        contact:"",
-        urgency:"Normal",
-        message:""
+        patientName: "",
+        bloodGroup: "",
+        hospital: "",
+        city: "",
+        units: "",
+        contact: "",
+        urgency: "Normal",
+        message: ""
 
     });
     useEffect(() => {
 
-    const fetchProfile = async () => {
+        const fetchProfile = async () => {
 
-        const token = localStorage.getItem("token");
+            const token = localStorage.getItem("token");
 
-        const res = await api.get("/users/profile", {
-            headers:{
-                Authorization:`Bearer ${token}`
+            const res = await api.get("/users/profile", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            setUser(res.data);
+
+            if (!isProfileComplete(res.data)) {
+
+                alert("Please complete your profile first.");
+
+                navigate("/profile");
+
+                return;
+
             }
-        });
 
-        setUser(res.data);
+        };
 
-        if (!isProfileComplete(res.data)) {
+        fetchProfile();
 
-    alert("Please complete your profile first.");
+    }, []);
 
-    navigate("/profile");
-
-    return;
-
-}
-
-    };
-
-    fetchProfile();
-
-}, []);
-
-    const handleChange=(e)=>{
+    const handleChange = (e) => {
 
         setFormData({
 
             ...formData,
 
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
 
         });
 
     };
 
-    const handleSubmit = async(e)=>{
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        try{
+        try {
 
             const token = localStorage.getItem("token");
 
@@ -76,9 +76,9 @@ function RequestBlood() {
 
                 {
 
-                    headers:{
+                    headers: {
 
-                        Authorization:`Bearer ${token}`
+                        Authorization: `Bearer ${token}`
 
                     }
 
@@ -90,20 +90,20 @@ function RequestBlood() {
 
             setFormData({
 
-                patientName:"",
-                bloodGroup:"",
-                hospital:"",
-                city:"",
-                units:"",
-                contact:"",
-                urgency:"Normal",
-                message:""
+                patientName: "",
+                bloodGroup: "",
+                hospital: "",
+                city: "",
+                units: "",
+                contact: "",
+                urgency: "Normal",
+                message: ""
 
             });
 
         }
 
-        catch(err){
+        catch (err) {
 
             alert("Error Submitting Request");
 
@@ -111,7 +111,7 @@ function RequestBlood() {
 
     };
 
-    return(
+    return (
 
         <div className="request-container">
 
@@ -122,16 +122,16 @@ function RequestBlood() {
                 <form onSubmit={handleSubmit}>
 
                     <input
-                    name="patientName"
-                    placeholder="Patient Name"
-                    value={formData.patientName}
-                    onChange={handleChange}
+                        name="patientName"
+                        placeholder="Patient Name"
+                        value={formData.patientName}
+                        onChange={handleChange}
                     />
 
                     <select
-                    name="bloodGroup"
-                    value={formData.bloodGroup}
-                    onChange={handleChange}
+                        name="bloodGroup"
+                        value={formData.bloodGroup}
+                        onChange={handleChange}
                     >
 
                         <option value="">Blood Group</option>
@@ -148,51 +148,51 @@ function RequestBlood() {
                     </select>
 
                     <input
-                    name="hospital"
-                    placeholder="Hospital"
-                    value={formData.hospital}
-                    onChange={handleChange}
+                        name="hospital"
+                        placeholder="Hospital"
+                        value={formData.hospital}
+                        onChange={handleChange}
                     />
 
                     <input
-                    name="city"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={handleChange}
+                        name="city"
+                        placeholder="City"
+                        value={formData.city}
+                        onChange={handleChange}
                     />
 
                     <input
-                    type="number"
-                    name="units"
-                    placeholder="Units Required"
-                    value={formData.units}
-                    onChange={handleChange}
+                        type="number"
+                        name="units"
+                        placeholder="Units Required"
+                        value={formData.units}
+                        onChange={handleChange}
                     />
 
                     <input
-    type="tel"
-    name="contact"
-    placeholder="Contact Number"
-    value={formData.contact}
-    onChange={(e) => {
-        const value = e.target.value.replace(/\D/g, "");
-        if (value.length <= 10) {
-            setFormData({
-                ...formData,
-                contact: value,
-            });
-        }
-    }}
-    maxLength={10}
-    inputMode="numeric"
-    pattern="[0-9]{10}"
-    required
-/>
+                        type="tel"
+                        name="contact"
+                        placeholder="Contact Number"
+                        value={formData.contact}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, "");
+                            if (value.length <= 10) {
+                                setFormData({
+                                    ...formData,
+                                    contact: value,
+                                });
+                            }
+                        }}
+                        maxLength={10}
+                        inputMode="numeric"
+                        pattern="[0-9]{10}"
+                        required
+                    />
 
                     <select
-                    name="urgency"
-                    value={formData.urgency}
-                    onChange={handleChange}
+                        name="urgency"
+                        value={formData.urgency}
+                        onChange={handleChange}
                     >
 
                         <option>Normal</option>
@@ -203,16 +203,16 @@ function RequestBlood() {
 
                     <textarea
 
-                    name="message"
+                        name="message"
 
-                    placeholder="Additional Details"
+                        placeholder="Additional Details"
 
-                    value={formData.message}
+                        value={formData.message}
 
-                    onChange={handleChange}
+                        onChange={handleChange}
 
                     />
-                    
+
 
                     <button>
 
