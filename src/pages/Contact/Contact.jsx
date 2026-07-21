@@ -1,4 +1,3 @@
-// 1. Import useEffect alongside useState
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaClock, FaPaperPlane } from 'react-icons/fa'
@@ -15,7 +14,6 @@ const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
-  // 2. Add this effect to scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -43,25 +41,6 @@ const Contact = () => {
           <p className="contact-hero-subtext">
             Questions about donating, requesting blood, or partnering with us? Reach out anytime.
           </p>
-        </div>
-      </section>
-
-      <section className="section-tight">
-        <div className="container contact-cards-grid">
-          {CONTACT_CARDS.map((c, i) => (
-            <motion.div
-              key={c.title}
-              className="contact-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-            >
-              <div className="contact-card-icon">{c.icon}</div>
-              <h4>{c.title}</h4>
-              <p>{c.value}</p>
-            </motion.div>
-          ))}
         </div>
       </section>
 
@@ -129,6 +108,7 @@ const Contact = () => {
           </motion.div>
         </div>
       </section>
+    
     </>
   )
 }
