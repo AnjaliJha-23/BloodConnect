@@ -115,6 +115,9 @@ const SearchSection = () => {
   const [area, setArea] = useState("");
 
   const [donors, setDonors] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const DONORS_PER_PAGE = 6;
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -135,6 +138,7 @@ const SearchSection = () => {
       });
 
       setDonors(res.data);
+      setCurrentPage(1);
     } catch (err) {
       console.log(err);
       toast.error(err.response?.data?.message || "Unable to fetch donors.");
@@ -142,6 +146,11 @@ const SearchSection = () => {
       setLoading(false);
     }
   };
+  const totalPages = Math.ceil(donors.length / DONORS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * DONORS_PER_PAGE;
+
+  const currentDonors = donors.slice(startIndex, startIndex + DONORS_PER_PAGE);
   return (
     <section className="search-section section" id="find-donor">
       <div className="container">
@@ -247,7 +256,7 @@ const SearchSection = () => {
               <h2 className="results-title">Available Donors</h2>
 
               <div className="donor-grid">
-                {donors.map((donor) => (
+                {currentDonors.map((donor) => (
                   <div className="donor-card" key={donor._id}>
                     <h3>{donor.name}</h3>
 
@@ -289,6 +298,25 @@ const SearchSection = () => {
                   </div>
                 ))}
               </div>
+              {totalPages > 1 && (
+                <div className="pagination">
+                  <button
+                    onClick={() => setCurrentPage((prev) => prev - 1)}
+                    disabled={currentPage === 1}>
+                    Previous
+                  </button>
+
+                  <span>
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  <button
+                    onClick={() => setCurrentPage((prev) => prev + 1)}
+                    disabled={currentPage === totalPages}>
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </motion.div>
