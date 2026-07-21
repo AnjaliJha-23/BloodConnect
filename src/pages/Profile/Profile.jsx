@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import api from "../../services/api";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Profile() {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,11 +19,8 @@ function Profile() {
   });
 
   useEffect(() => {
-
     const fetchProfile = async () => {
-
       try {
-
         const token = localStorage.getItem("token");
 
         const res = await api.get("/users/profile", {
@@ -33,72 +30,60 @@ function Profile() {
         });
 
         setFormData(res.data);
-
       } catch (err) {
         console.log(err);
       }
-
     };
 
     fetchProfile();
-
   }, []);
 
   const handleChange = (e) => {
-
     const { name, value, type, checked } = e.target;
 
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
       const token = localStorage.getItem("token");
 
       await api.put("/users/profile", formData, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-alert("Profile Updated Successfully!");
+      toast.success("Profile updated successfully!");
 
-// Update localStorage
-const updatedUser = await api.get("/users/profile", {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
+      // Update localStorage
+      const updatedUser = await api.get("/users/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-localStorage.setItem("user", JSON.stringify(updatedUser.data));
+      localStorage.setItem("user", JSON.stringify(updatedUser.data));
+      window.dispatchEvent(new Event("storage"));
 
-// Redirect to Home
-navigate("/");
-
+      // Redirect to Home
+      navigate("/");
     } catch (err) {
-      alert("Error Updating Profile");
+      toast.error(err.response?.data?.message || "Failed to update profile.");
     }
-
   };
 
   return (
-
     <div className="profile-container">
-
       <div className="profile-card">
-
         <h2>Edit Profile</h2>
 
         <form onSubmit={handleSubmit}>
-
           <input
             type="tel"
             name="phone"
@@ -114,8 +99,7 @@ navigate("/");
           <select
             name="bloodGroup"
             value={formData.bloodGroup || ""}
-            onChange={handleChange}
-          >
+            onChange={handleChange}>
             <option value="">Select Blood Group</option>
             <option>A+</option>
             <option>A-</option>
@@ -138,8 +122,7 @@ navigate("/");
           <select
             name="gender"
             value={formData.gender || ""}
-            onChange={handleChange}
-          >
+            onChange={handleChange}>
             <option value="">Gender</option>
             <option>Male</option>
             <option>Female</option>
@@ -163,7 +146,6 @@ navigate("/");
           />
 
           <input
-
             type="text"
             name="area"
             placeholder="Example: Dwarka, Salt Lake, Koramangala"
@@ -172,30 +154,20 @@ navigate("/");
           />
 
           <label className="checkbox">
-
             <input
               type="checkbox"
               name="available"
               checked={formData.available}
               onChange={handleChange}
             />
-
             Available for Donation
-
           </label>
 
-          <button type="submit">
-            Save Changes
-          </button>
-
+          <button type="submit">Save Changes</button>
         </form>
-
       </div>
-
     </div>
-
   );
-
 }
 
 export default Profile;

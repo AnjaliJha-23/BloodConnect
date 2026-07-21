@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import "./BloodRequests.css";
+import toast from "react-hot-toast";
 
 // State to Cities mapping
 const stateCityData = {
@@ -85,10 +86,10 @@ function BloodRequests() {
         }
       );
 
-      alert("Response Sent Successfully ❤️");
+      toast.success("Response Sent Successfully ❤️");
       fetchRequests(); // Refresh requests
     } catch (err) {
-      alert(err.response?.data?.message || "Failed");
+      toast.error(err.response?.data?.message || "Failed");
     }
   };
 

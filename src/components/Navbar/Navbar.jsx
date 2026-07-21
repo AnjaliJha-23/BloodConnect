@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
-import {
-  useNavigate,
-  useLocation,
-  Link,
-  NavLink,
-} from "react-router-dom";
+import { useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import { FaHeart, FaBars, FaTimes } from "react-icons/fa";
 import "./Navbar.css";
+import toast from "react-hot-toast";
 
 const SCROLL_TARGETS = {
   home: "home",
@@ -34,8 +30,7 @@ const Navbar = () => {
 
     window.addEventListener("storage", updateUser);
 
-    return () =>
-      window.removeEventListener("storage", updateUser);
+    return () => window.removeEventListener("storage", updateUser);
   }, []);
 
   // Navbar shadow on scroll
@@ -44,8 +39,7 @@ const Navbar = () => {
 
     window.addEventListener("scroll", onScroll);
 
-    return () =>
-      window.removeEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Close mobile menu after changing page
@@ -58,10 +52,7 @@ const Navbar = () => {
     if (location.pathname !== "/") return;
 
     // We track the inner feature blocks sequentially
-    const sections = [
-      "find-donor",
-      "emergency-request",
-    ];
+    const sections = ["find-donor", "emergency-request"];
 
     const handleScroll = () => {
       // FIX: Force 'home' highlight instantly when the user is at the top fold of the screen
@@ -98,8 +89,7 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Trigger immediate check on component mount framework cycles
 
-    return () =>
-      window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
   const scrollToSection = (id) => {
@@ -144,96 +134,65 @@ const Navbar = () => {
 
     window.dispatchEvent(new Event("storage"));
 
-    navigate("/");
+    toast.success("Logged out successfully.");
+
+    navigate("/", { replace: true });
   };
 
   return (
-    <header
-      className={`navbar ${
-        scrolled ? "navbar-scrolled" : ""
-      }`}
-    >
+    <header className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}>
       <div className="container navbar-inner">
-        <a
-          href="/"
-          className="navbar-logo"
-          onClick={handleHomeClick}
-        >
+        <Link to="/" className="navbar-logo" onClick={handleHomeClick}>
           <FaHeart className="navbar-logo-icon" />
           <span>BloodConnect</span>
-        </a>
+        </Link>
 
-        <nav
-          className={`navbar-links ${
-            menuOpen ? "navbar-links-open" : ""
-          }`}
-        >
+        <nav className={`navbar-links ${menuOpen ? "navbar-links-open" : ""}`}>
           <NavLink
             to="/"
             end
             onClick={handleHomeClick}
             className={`navbar-link ${
-              activeSection === "home" &&
-              location.pathname === "/"
+              activeSection === "home" && location.pathname === "/"
                 ? "active-link"
                 : ""
-            }`}
-          >
+            }`}>
             Home
           </NavLink>
 
           <button
             className={`navbar-link navbar-link-btn ${
-              activeSection === "find-donor" &&
-              location.pathname === "/"
+              activeSection === "find-donor" && location.pathname === "/"
                 ? "active-link"
                 : ""
             }`}
-            onClick={() =>
-              handleSectionClick(
-                SCROLL_TARGETS.findDonor
-              )
-            }
-          >
+            onClick={() => handleSectionClick(SCROLL_TARGETS.findDonor)}>
             Find Donor
           </button>
 
           <button
             className={`navbar-link navbar-link-btn ${
-              activeSection ===
-                "emergency-request" &&
-              location.pathname === "/"
+              activeSection === "emergency-request" && location.pathname === "/"
                 ? "active-link"
                 : ""
             }`}
-            onClick={() =>
-              handleSectionClick(
-                SCROLL_TARGETS.requestBlood
-              )
-            }
-          >
+            onClick={() => handleSectionClick(SCROLL_TARGETS.requestBlood)}>
             Request Blood
           </button>
 
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              `navbar-link ${
-                isActive ? "active-link" : ""
-              }`
-            }
-          >
+              `navbar-link ${isActive ? "active-link" : ""}`
+            }>
             About Us
           </NavLink>
 
           <NavLink
             to="/contact"
             className={({ isActive }) =>
-              `navbar-link ${
-                isActive ? "active-link" : ""
-              }`
-            }
-          >
+              `navbar-link ${isActive ? "active-link" : ""}`
+            }>
             Contact Us
           </NavLink>
 
@@ -241,33 +200,23 @@ const Navbar = () => {
           <div className="navbar-auth navbar-auth-mobile">
             {user ? (
               <>
-                <Link
-                  to="/dashboard"
-                  className="btn btn-outline navbar-btn-sm"
-                >
+                <Link to="/dashboard" className="btn btn-outline navbar-btn-sm">
                   Dashboard
                 </Link>
 
                 <button
                   className="btn btn-primary navbar-btn-sm"
-                  onClick={handleLogout}
-                >
+                  onClick={handleLogout}>
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="btn btn-outline navbar-btn-sm"
-                >
+                <Link to="/login" className="btn btn-outline navbar-btn-sm">
                   Login
                 </Link>
 
-                <Link
-                  to="/register"
-                  className="btn btn-primary navbar-btn-sm"
-                >
+                <Link to="/register" className="btn btn-primary navbar-btn-sm">
                   Register
                 </Link>
               </>
@@ -279,34 +228,24 @@ const Navbar = () => {
         <div className="navbar-auth">
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className="btn btn-outline navbar-btn-sm"
-              >
+              <Link to="/dashboard" className="btn btn-outline navbar-btn-sm">
                 Dashboard
               </Link>
 
               <button
                 className="btn btn-primary navbar-btn-sm"
                 onClick={handleLogout}
-                type="button"
-              >
+                type="button">
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="btn btn-outline navbar-btn-sm"
-              >
+              <Link to="/login" className="btn btn-outline navbar-btn-sm">
                 Login
               </Link>
 
-              <Link
-                to="/register"
-                className="btn btn-primary navbar-btn-sm"
-              >
+              <Link to="/register" className="btn btn-primary navbar-btn-sm">
                 Register
               </Link>
             </>
@@ -315,12 +254,9 @@ const Navbar = () => {
 
         <button
           className="navbar-toggle"
-          onClick={() =>
-            setMenuOpen(!menuOpen)
-          }
+          onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle Menu"
-          type="button"
-        >
+          type="button">
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>

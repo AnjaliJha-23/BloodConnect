@@ -3,9 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../../services/api";
 import "./Login.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Login() {
-
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -25,7 +25,6 @@ function Login() {
     e.preventDefault();
 
     try {
-
       const res = await api.post("/auth/login", formData);
 
       // Save JWT
@@ -35,30 +34,24 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       window.dispatchEvent(new Event("storage"));
 
-      alert("Login Successful!");
+      toast.success("Login Successful!");
 
-      navigate("/dashboard");
-
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 800);
     } catch (err) {
-
-      alert(err.response?.data?.message || "Login Failed");
-
+      toast.error(err.response?.data?.message || "Login Failed");
     }
   };
 
   return (
     <div className="login-container">
-
       <div className="login-card">
-
         <h1 className="logo">🩸 BloodConnect</h1>
 
-        <p className="subtitle">
-          Welcome Back
-        </p>
+        <p className="subtitle">Welcome Back</p>
 
         <form onSubmit={handleSubmit} autoComplete="off">
-
           <input
             type="email"
             name="email"
@@ -70,7 +63,6 @@ function Login() {
           />
 
           <div className="password-field">
-
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -84,26 +76,18 @@ function Login() {
             <span
               type="button"
               className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-            >
+              onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
-
           </div>
 
-          <button type="submit">
-            Login
-          </button>
-
+          <button type="submit">Login</button>
         </form>
 
         <p className="register-text">
-          Don't have an account?{" "}
-          <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
-
       </div>
-
     </div>
   );
 }

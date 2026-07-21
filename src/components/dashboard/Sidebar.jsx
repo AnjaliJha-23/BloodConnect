@@ -1,6 +1,5 @@
 import "./Sidebar.css";
 import {
-  FaUser,
   FaTint,
   FaMapMarkerAlt,
   FaCheckCircle,

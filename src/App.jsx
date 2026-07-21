@@ -22,12 +22,11 @@ function App() {
   const location = useLocation();
 
   const hideLayout =
-    location.pathname === "/login" ||
-    location.pathname === "/register";
+    location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <>
-      <ScrollToTop/>
+      <ScrollToTop />
       {!hideLayout && <Navbar />}
 
       <main>
@@ -35,19 +34,43 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/dashboard" element={<ProtectedRoute>
-             <Dashboard /> 
-             </ProtectedRoute>
-            }/>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<ProtectedRoute>
-            <Profile />
-            </ProtectedRoute>
-          }/>
-          <Route path="/request-blood" element={ <ProtectedRoute> <ProfileProtectedRoute> <RequestBlood /> </ProfileProtectedRoute> </ProtectedRoute>} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/request-blood"
+            element={
+              <ProtectedRoute>
+                <ProfileProtectedRoute>
+                  <RequestBlood />
+                </ProfileProtectedRoute>
+              </ProtectedRoute>
+            }
+          />
           <Route path="/register" element={<Register />} />
-          <Route path="/my-requests" element={<MyRequests />} />
+          <Route
+            path="/my-requests"
+            element={
+              <ProtectedRoute>
+                <MyRequests />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

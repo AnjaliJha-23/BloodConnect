@@ -2,8 +2,9 @@ import { useState } from "react";
 import api from "../../services/api";
 import "./Register.css";
 import { FaTint } from "react-icons/fa";
-import { Link ,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Register() {
   const navigate = useNavigate();
@@ -27,8 +28,8 @@ function Register() {
     e.preventDefault();
 
     if (!passwordRegex.test(formData.password)) {
-      alert(
-        "Password must be at least 6 characters long and include:\n\n• One uppercase letter\n• One lowercase letter\n• One number\n• One special character"
+      toast.error(
+        "Password must be at least 6 characters and include uppercase, lowercase, a number, and a special character.",
       );
       return;
     }
@@ -36,7 +37,7 @@ function Register() {
     try {
       const res = await api.post("/auth/register", formData);
 
-      alert(res.data.message);
+      toast.success(res.data.message || "Registration Successful!");
 
       setFormData({
         name: "",
@@ -44,16 +45,16 @@ function Register() {
         password: "",
       });
 
-      navigate("/login");
-
+      setTimeout(() => {
+        navigate("/login");
+      }, 800);
     } catch (err) {
-      alert(err.response?.data?.message || "Registration Failed");
+      toast.error(err.response?.data?.message || "Registration Failed");
     }
   };
   return (
     <div className="register-container">
       <div className="register-card">
-
         <h1 className="logo">
           <FaTint />
           BloodConnect
@@ -61,7 +62,6 @@ function Register() {
         <p className="subtitle">Become a Blood Donor Today</p>
 
         <form onSubmit={handleSubmit} autoComplete="off">
-
           <input
             type="text"
             name="name"
@@ -82,7 +82,6 @@ function Register() {
             required
           />
           <div className="password-field">
-
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -96,23 +95,17 @@ function Register() {
             <span
               type="button"
               className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-            >
+              onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
-
           </div>
 
-          <button type="submit">
-            Register
-          </button>
-
+          <button type="submit">Register</button>
         </form>
 
         <p className="login-text">
           Already have an account? <Link to="/login">Login</Link>
         </p>
-
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { isProfileComplete } from "../../utils/profileComplete";
 import "./RequestBlood.css";
+import toast from "react-hot-toast";
 
 function RequestBlood() {
   const navigate = useNavigate();
@@ -19,211 +20,132 @@ function RequestBlood() {
     condition: "",
     reason: "",
     otherReason: "",
-    message: ""
+    message: "",
   });
-  
-const STATES = [
-  "Delhi",
-  "Maharashtra",
-  "Uttar Pradesh",
-  "Karnataka",
-  "Tamil Nadu",
-  "Telangana",
-  "Andhra Pradesh",
-  "Kerala",
-  "Gujarat",
-  "Rajasthan",
-  "West Bengal",
-  "Punjab",
-  "Haryana",
-  "Bihar",
-  "Madhya Pradesh",
-  "Odisha",
-  "Jharkhand",
-  "Assam",
-  "Chhattisgarh",
-  "Uttarakhand",
-  "Himachal Pradesh",
-  "Jammu and Kashmir",
-];
 
-const STATE_CITIES = {
-  Delhi: ["New Delhi", "North Delhi", "South Delhi", "East Delhi", "West Delhi"],
+  const STATES = [
+    "Delhi",
+    "Maharashtra",
+    "Uttar Pradesh",
+    "Karnataka",
+    "Tamil Nadu",
+    "Telangana",
+    "Andhra Pradesh",
+    "Kerala",
+    "Gujarat",
+    "Rajasthan",
+    "West Bengal",
+    "Punjab",
+    "Haryana",
+    "Bihar",
+    "Madhya Pradesh",
+    "Odisha",
+    "Jharkhand",
+    "Assam",
+    "Chhattisgarh",
+    "Uttarakhand",
+    "Himachal Pradesh",
+    "Jammu and Kashmir",
+  ];
 
-  Maharashtra: [
-    "Mumbai",
-    "Pune",
-    "Nagpur",
-    "Nashik",
-    "Thane",
-    "Aurangabad",
-    "Kolhapur",
-  ],
+  const STATE_CITIES = {
+    Delhi: [
+      "New Delhi",
+      "North Delhi",
+      "South Delhi",
+      "East Delhi",
+      "West Delhi",
+    ],
 
-  "Uttar Pradesh": [
-    "Lucknow",
-    "Kanpur",
-    "Agra",
-    "Varanasi",
-    "Prayagraj",
-    "Noida",
-    "Ghaziabad",
-    "Meerut",
-    "Gorakhpur",
-  ],
+    Maharashtra: [
+      "Mumbai",
+      "Pune",
+      "Nagpur",
+      "Nashik",
+      "Thane",
+      "Aurangabad",
+      "Kolhapur",
+    ],
 
-  Karnataka: [
-    "Bangalore",
-    "Mysore",
-    "Hubli",
-    "Mangalore",
-    "Belgaum",
-  ],
+    "Uttar Pradesh": [
+      "Lucknow",
+      "Kanpur",
+      "Agra",
+      "Varanasi",
+      "Prayagraj",
+      "Noida",
+      "Ghaziabad",
+      "Meerut",
+      "Gorakhpur",
+    ],
 
-  "Tamil Nadu": [
-    "Chennai",
-    "Coimbatore",
-    "Madurai",
-    "Salem",
-    "Tiruchirappalli",
-  ],
+    Karnataka: ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
 
-  Telangana: [
-    "Hyderabad",
-    "Warangal",
-    "Karimnagar",
-    "Nizamabad",
-  ],
+    "Tamil Nadu": [
+      "Chennai",
+      "Coimbatore",
+      "Madurai",
+      "Salem",
+      "Tiruchirappalli",
+    ],
 
-  "Andhra Pradesh": [
-    "Visakhapatnam",
-    "Vijayawada",
-    "Guntur",
-    "Tirupati",
-  ],
+    Telangana: ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad"],
 
-  Kerala: [
-    "Kochi",
-    "Thiruvananthapuram",
-    "Kozhikode",
-    "Thrissur",
-  ],
+    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati"],
 
-  Gujarat: [
-    "Ahmedabad",
-    "Surat",
-    "Vadodara",
-    "Rajkot",
-  ],
+    Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
 
-  Rajasthan: [
-    "Jaipur",
-    "Jodhpur",
-    "Udaipur",
-    "Kota",
-  ],
+    Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
 
-  "West Bengal": [
-    "Kolkata",
-    "Howrah",
-    "Durgapur",
-    "Siliguri",
-  ],
+    Rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
 
-  Punjab: [
-    "Ludhiana",
-    "Amritsar",
-    "Jalandhar",
-    "Patiala",
-  ],
+    "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
 
-  Haryana: [
-    "Gurugram",
-    "Faridabad",
-    "Panipat",
-    "Hisar",
-  ],
+    Punjab: ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
 
-  Bihar: [
-    "Patna",
-    "Gaya",
-    "Muzaffarpur",
-    "Bhagalpur",
-  ],
+    Haryana: ["Gurugram", "Faridabad", "Panipat", "Hisar"],
 
-  "Madhya Pradesh": [
-    "Bhopal",
-    "Indore",
-    "Jabalpur",
-    "Gwalior",
-  ],
+    Bihar: ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"],
 
-  Odisha: [
-    "Bhubaneswar",
-    "Cuttack",
-    "Rourkela",
-    "Sambalpur",
-  ],
+    "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior"],
 
-  Jharkhand: [
-    "Ranchi",
-    "Jamshedpur",
-    "Dhanbad",
-    "Bokaro",
-  ],
+    Odisha: ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur"],
 
-  Assam: [
-    "Guwahati",
-    "Silchar",
-    "Dibrugarh",
-    "Tezpur",
-  ],
+    Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
 
-  Chhattisgarh: [
-    "Raipur",
-    "Bilaspur",
-    "Durg",
-    "Korba",
-  ],
+    Assam: ["Guwahati", "Silchar", "Dibrugarh", "Tezpur"],
 
-  Uttarakhand: [
-    "Dehradun",
-    "Haridwar",
-    "Haldwani",
-    "Roorkee",
-  ],
+    Chhattisgarh: ["Raipur", "Bilaspur", "Durg", "Korba"],
 
-  "Himachal Pradesh": [
-    "Shimla",
-    "Dharamshala",
-    "Solan",
-    "Mandi",
-  ],
+    Uttarakhand: ["Dehradun", "Haridwar", "Haldwani", "Roorkee"],
 
-  "Jammu and Kashmir": [
-    "Srinagar",
-    "Jammu",
-    "Anantnag",
-    "Baramulla",
-  ],
-};
+    "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi"],
+
+    "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla"],
+  };
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await api.get("/users/profile", {
+        /*const res = await api.get("/users/profile", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setUser(res.data);
 
         if (!isProfileComplete(res.data)) {
-          alert("Please complete your profile first.");
+          toast.error("Please complete your profile before requesting blood.");
+
+          setTimeout(() => {
+            navigate("/profile");
+          }, 800);
+
+          return;
           navigate("/profile");
           return;
-        }
+        }*/
       } catch (err) {
         console.log("Error fetching profile:", err);
       }
@@ -235,7 +157,7 @@ const STATE_CITIES = {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -245,7 +167,8 @@ const STATE_CITIES = {
     // Prepare payload: if "Other" is selected, use the custom text from otherReason
     const payload = {
       ...formData,
-      reason: formData.reason === "Other" ? formData.otherReason : formData.reason
+      reason:
+        formData.reason === "Other" ? formData.otherReason : formData.reason,
     };
 
     try {
@@ -253,11 +176,11 @@ const STATE_CITIES = {
 
       await api.post("/requests", payload, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      alert("Blood Request Submitted Successfully!");
+      toast.success("Blood request submitted successfully!");
 
       setFormData({
         patientName: "",
@@ -270,11 +193,13 @@ const STATE_CITIES = {
         condition: "",
         reason: "",
         otherReason: "",
-        message: ""
+        message: "",
       });
     } catch (err) {
       console.error(err);
-      alert("Error Submitting Request");
+      toast.error(
+  err.response?.data?.message || "Failed to submit blood request."
+);
     }
   };
 
@@ -296,8 +221,7 @@ const STATE_CITIES = {
             name="bloodGroup"
             value={formData.bloodGroup}
             onChange={handleChange}
-            required
-          >
+            required>
             <option value="">Select Blood Group</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -317,45 +241,42 @@ const STATE_CITIES = {
             required
           />
           <select
-  name="state"
-  value={formData.state}
-  onChange={(e) => {
-    setFormData({
-      ...formData,
-      state: e.target.value,
-      city: ""
-    });
-  }}
-  required
->
-  <option value="">Select State</option>
+            name="state"
+            value={formData.state}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                state: e.target.value,
+                city: "",
+              });
+            }}
+            required>
+            <option value="">Select State</option>
 
-  {STATES.map((state) => (
-    <option key={state} value={state}>
-      {state}
-    </option>
-  ))}
-</select>
-        
+            {STATES.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
 
           <select
-  name="city"
-  value={formData.city}
-  onChange={handleChange}
-  disabled={!formData.state}
-  required
->
-  <option value="">
-    {formData.state ? "Select City" : "Select State First"}
-  </option>
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            disabled={!formData.state}
+            required>
+            <option value="">
+              {formData.state ? "Select City" : "Select State First"}
+            </option>
 
-  {formData.state &&
-    STATE_CITIES[formData.state]?.map((city) => (
-      <option key={city} value={city}>
-        {city}
-      </option>
-    ))}
-</select>
+            {formData.state &&
+              STATE_CITIES[formData.state]?.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+          </select>
 
           <input
             type="text"
@@ -367,7 +288,7 @@ const STATE_CITIES = {
               if (value === "" || /^[1-9]\d*$/.test(value)) {
                 setFormData({
                   ...formData,
-                  units: value
+                  units: value,
                 });
               }
             }}
@@ -385,7 +306,7 @@ const STATE_CITIES = {
               if (value.length <= 10) {
                 setFormData({
                   ...formData,
-                  contact: value
+                  contact: value,
                 });
               }
             }}
@@ -401,8 +322,7 @@ const STATE_CITIES = {
             name="condition"
             value={formData.condition}
             onChange={handleChange}
-            required
-          >
+            required>
             <option value="">Select Patient Condition</option>
             <option value="Stable">Stable</option>
             <option value="Urgent">Urgent</option>
@@ -416,8 +336,7 @@ const STATE_CITIES = {
             name="reason"
             value={formData.reason}
             onChange={handleChange}
-            required
-          >
+            required>
             <option value="">Select Reason</option>
             <option value="Accident">Accident</option>
             <option value="Disease">Disease</option>
