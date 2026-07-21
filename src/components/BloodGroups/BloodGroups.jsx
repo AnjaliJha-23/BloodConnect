@@ -27,7 +27,7 @@ const BloodGroups = () => {
   return (
     <section className="blood-groups section-tight">
       <div className="container">
-        <div className="section-header-center">
+        <div className="section-header-center" style={{ marginBottom: '32px' }}>
           <span className="eyebrow">Blood Types</span>
           <h2 className="section-heading">Browse by Blood Group</h2>
           <p className="section-subtext" style={{ margin: '0 auto' }}>
@@ -65,11 +65,11 @@ const BloodGroups = () => {
                   {/* BACK FACE */}
                   <div className="card-face card-back">
                     <div className="compat-item">
-                      <span className="compat-title">Gives to:</span>
+                      <span className="compat-title">Gives to</span>
                       <span className="compat-val">{item.give}</span>
                     </div>
                     <div className="compat-item">
-                      <span className="compat-title">Receives:</span>
+                      <span className="compat-title">Receives from</span>
                       <span className="compat-val">{item.receive}</span>
                     </div>
                     <FaUndo className="flip-back-icon" />
