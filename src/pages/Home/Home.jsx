@@ -20,12 +20,11 @@ export default function Home() {
       const timer = setTimeout(() => {
         const element = document.getElementById(targetId);
         if (element) {
-          // FIX: Look at which section was clicked and apply the perfect scrolling position
           if (targetId === 'emergency-request') {
-            // Centers the emergency banner vertically on your screen ("thoda upar")
+            
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
           } else {
-            // Keeps the Find Donor card perfectly aligned right at the top layout boundary
+            
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }
@@ -44,7 +43,7 @@ export default function Home() {
         <Statistics />
       </div>
       
-      {/* Added a scroll clearance buffer so the navbar doesn't clip the card when block: "start" runs */}
+      
       <div id="find-donor" style={{ scrollMarginTop: '120px', margin: '3rem 0' }}>
         <SearchSection />
       </div>
@@ -53,7 +52,7 @@ export default function Home() {
         <EmergencySection />
       </div>
 
-    {/* Blood Requests Feed */}
+    
       <div style={{ margin: '3rem 0' }}>
         <BloodRequests />
       </div>
@@ -62,7 +61,7 @@ export default function Home() {
         <Features />
       </div>
 
-      {/* Keeps a scroll buffer area at the bottom layout boundary so the center block can execute */}
+      
       <div style={{ paddingBottom: '12vh' }}></div>
     </div>
   );
