@@ -170,11 +170,24 @@ function RequestBlood() {
                     />
 
                     <input
-                    name="contact"
-                    placeholder="Contact Number"
-                    value={formData.contact}
-                    onChange={handleChange}
-                    />
+    type="tel"
+    name="contact"
+    placeholder="Contact Number"
+    value={formData.contact}
+    onChange={(e) => {
+        const value = e.target.value.replace(/\D/g, "");
+        if (value.length <= 10) {
+            setFormData({
+                ...formData,
+                contact: value,
+            });
+        }
+    }}
+    maxLength={10}
+    inputMode="numeric"
+    pattern="[0-9]{10}"
+    required
+/>
 
                     <select
                     name="urgency"
