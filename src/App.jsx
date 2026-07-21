@@ -16,6 +16,8 @@ import MyRequests from "./pages/MyRequests/MyRequests";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+
 function App() {
   const location = useLocation();
 
@@ -25,6 +27,7 @@ function App() {
 
   return (
     <>
+      <ScrollToTop/>
       {!hideLayout && <Navbar />}
 
       <main>
