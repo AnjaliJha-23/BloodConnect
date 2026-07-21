@@ -5,6 +5,9 @@ import api from "../../services/api";
 import "./SearchSection.css";
 import toast from "react-hot-toast";
 
+// Import your BloodGroups component
+import BloodGroups from "../bloodgroups/BloodGroups"; // Adjust path according to your folder structure
+
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 const STATES = [
@@ -31,82 +34,6 @@ const STATES = [
   "Himachal Pradesh",
   "Jammu and Kashmir",
 ];
-
-const STATE_CITIES = {
-  Delhi: [
-    "New Delhi",
-    "North Delhi",
-    "South Delhi",
-    "East Delhi",
-    "West Delhi",
-  ],
-
-  Maharashtra: [
-    "Mumbai",
-    "Pune",
-    "Nagpur",
-    "Nashik",
-    "Thane",
-    "Aurangabad",
-    "Kolhapur",
-  ],
-
-  "Uttar Pradesh": [
-    "Lucknow",
-    "Kanpur",
-    "Agra",
-    "Varanasi",
-    "Prayagraj",
-    "Noida",
-    "Ghaziabad",
-    "Meerut",
-    "Gorakhpur",
-  ],
-
-  Karnataka: ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
-
-  "Tamil Nadu": [
-    "Chennai",
-    "Coimbatore",
-    "Madurai",
-    "Salem",
-    "Tiruchirappalli",
-  ],
-
-  Telangana: ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad"],
-
-  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati"],
-
-  Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
-
-  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-
-  Rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
-
-  "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
-
-  Punjab: ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
-
-  Haryana: ["Gurugram", "Faridabad", "Panipat", "Hisar"],
-
-  Bihar: ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"],
-
-  "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior"],
-
-  Odisha: ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur"],
-
-  Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
-
-  Assam: ["Guwahati", "Silchar", "Dibrugarh", "Tezpur"],
-
-  Chhattisgarh: ["Raipur", "Bilaspur", "Durg", "Korba"],
-
-  Uttarakhand: ["Dehradun", "Haridwar", "Haldwani", "Roorkee"],
-
-  "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi"],
-
-  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla"],
-};
 
 const SearchSection = () => {
   const [bloodGroup, setBloodGroup] = useState("");
@@ -146,20 +73,22 @@ const SearchSection = () => {
       setLoading(false);
     }
   };
+
   const totalPages = Math.ceil(donors.length / DONORS_PER_PAGE);
-
   const startIndex = (currentPage - 1) * DONORS_PER_PAGE;
-
   const currentDonors = donors.slice(startIndex, startIndex + DONORS_PER_PAGE);
+
   return (
     <section className="search-section section" id="find-donor">
       <div className="container">
+        {/* Main Search Card */}
         <motion.div
           className="search-card"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6 }}>
+          transition={{ duration: 0.6 }}
+        >
           <h2 className="search-title">Find Blood Donor</h2>
 
           <form className="search-form" onSubmit={handleSearch}>
@@ -170,9 +99,9 @@ const SearchSection = () => {
                 <select
                   id="bloodGroup"
                   value={bloodGroup}
-                  onChange={(e) => setBloodGroup(e.target.value)}>
+                  onChange={(e) => setBloodGroup(e.target.value)}
+                >
                   <option value="">Select Blood Group</option>
-
                   {BLOOD_GROUPS.map((bg) => (
                     <option key={bg} value={bg}>
                       {bg}
@@ -184,16 +113,12 @@ const SearchSection = () => {
               {/* State */}
               <div className="search-field">
                 <label htmlFor="state">State</label>
-
                 <select
                   id="state"
                   value={state}
-                  onChange={(e) => {
-                    setState(e.target.value);
-                    setCity("");
-                  }}>
+                  onChange={(e) => setState(e.target.value)}
+                >
                   <option value="">Select State</option>
-
                   {STATES.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -202,31 +127,21 @@ const SearchSection = () => {
                 </select>
               </div>
 
-              {/* City */}
+              {/* City (Text Input) */}
               <div className="search-field">
                 <label htmlFor="city">City</label>
-
-                <select
+                <input
                   id="city"
+                  type="text"
+                  placeholder="Enter city"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  disabled={!state}>
-                  <option value="">
-                    {state ? "Select City" : "Select State First"}
-                  </option>
-
-                  {STATE_CITIES[state]?.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
 
-              {/* Area */}
+              {/* Area (Text Input) */}
               <div className="search-field">
                 <label htmlFor="area">Area</label>
-
                 <input
                   id="area"
                   type="text"
@@ -288,21 +203,25 @@ const SearchSection = () => {
                         textDecoration: "none",
                         display: "block",
                         marginTop: "15px",
-                      }}>
+                      }}
+                    >
                       <button
                         className="btn btn-outline-primary"
-                        style={{ width: "100%" }}>
+                        style={{ width: "100%" }}
+                      >
                         Contact
                       </button>
                     </a>
                   </div>
                 ))}
               </div>
+
               {totalPages > 1 && (
                 <div className="pagination">
                   <button
                     onClick={() => setCurrentPage((prev) => prev - 1)}
-                    disabled={currentPage === 1}>
+                    disabled={currentPage === 1}
+                  >
                     Previous
                   </button>
 
@@ -312,7 +231,8 @@ const SearchSection = () => {
 
                   <button
                     onClick={() => setCurrentPage((prev) => prev + 1)}
-                    disabled={currentPage === totalPages}>
+                    disabled={currentPage === totalPages}
+                  >
                     Next
                   </button>
                 </div>
@@ -320,6 +240,11 @@ const SearchSection = () => {
             </div>
           )}
         </motion.div>
+
+        {/* Embedded Interactive 3D Blood Group Cards */}
+        <div style={{ marginTop: "40px" }}>
+          <BloodGroups />
+        </div>
       </div>
     </section>
   );
