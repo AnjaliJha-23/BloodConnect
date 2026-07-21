@@ -1,94 +1,123 @@
-/* .dashboard-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 25px;
-    margin-top: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,.08);
-    border: 1px solid #ececec;
+/* Main Card Layout */
+.dashboard-card.donation-tip {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px;
+  margin-top: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid #ececec;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Flex Container */
 .tip-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
 }
 
 .tip-text {
-    flex: 1;
+  flex: 1;
+  min-width: 0; /* Prevents flex children from overflowing */
 }
 
+/* Dynamic Typography */
 .tip-text h2 {
-    font-size: 34px;
-    margin-bottom: 20px;
-    color: #222;
+  font-size: clamp(22px, 3.5vw, 32px);
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+  line-height: 1.25;
 }
 
-.tip-text p {
-    font-size: 16px;
-    margin: 12px 0;
-    color: #444;
-    line-height: 1.8;
+/* Tip List Formatting */
+.tip-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
+.tip-list li {
+  font-size: clamp(15px, 2.2vw, 17px);
+  color: #374151;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.check-icon {
+  color: #e53935;
+  font-weight: bold;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Image Container */
 .tip-image {
-    flex: 0 0 350px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 0 0 320px;
+  max-width: 320px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tip-image img {
-    width: 100%;
-    max-width: 320px;
-    height: auto;
-} */
-
-.dashboard-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 30px;
-    margin-top: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,.08);
-    border: 1px solid #ececec;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  object-fit: contain;
+  display: block;
 }
 
-.tip-content {
-    display: flex;
-    justify-content: space-between;
+/* Tablet / Medium Screens (Max-width: 900px) */
+@media (max-width: 900px) {
+  .tip-content {
+    gap: 20px;
+  }
+
+  .tip-image {
+    flex: 0 0 240px;
+    max-width: 240px;
+  }
+}
+
+/* Mobile Screens (Max-width: 680px) */
+@media (max-width: 680px) {
+  .dashboard-card.donation-tip {
+    padding: 20px 16px;
+    border-radius: 14px;
+    margin-top: 16px;
+  }
+
+  .tip-content {
+    flex-direction: column-reverse; /* Shows graphic at top, text below on mobile */
     align-items: center;
-    flex-wrap: nowrap;          /* Prevent image from going below */
-    gap: 40px;
-}
+    gap: 20px;
+  }
 
-.tip-text {
-    flex: 1;
-}
-
-.tip-text h2 {
-    font-size: 34px;
-    margin-bottom: 25px;
-    color: #222;
-}
-
-.tip-text p {
-    font-size: 18px;
-    margin: 18px 0;
-    color: #444;
-    line-height: 1.7;
-}
-
-.tip-image {
-    width: 360px;               /* Fixed width */
-    min-width: 360px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.tip-image img {
+  .tip-image {
+    flex: 0 0 auto;
     width: 100%;
-    max-width: 360px;
-    height: auto;
-    object-fit: contain;
+    max-width: 220px; /* Scaled down for mobile viewports */
+  }
+
+  .tip-text {
+    width: 100%;
+  }
+
+  .tip-text h2 {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .tip-list {
+    gap: 10px;
+  }
 }
