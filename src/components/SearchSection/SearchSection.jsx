@@ -1,45 +1,23 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
+import { State, City } from "country-state-city";
 import api from "../../services/api";
 import "./SearchSection.css";
 import toast from "react-hot-toast";
 
-// Import your BloodGroups component
-import BloodGroups from "../bloodgroups/BloodGroups"; // Adjust path according to your folder structure
+
+import BloodGroups from "../BloodGroups/BloodGroups";
 
 const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
-
-const STATES = [
-  "Delhi",
-  "Maharashtra",
-  "Uttar Pradesh",
-  "Karnataka",
-  "Tamil Nadu",
-  "Telangana",
-  "Andhra Pradesh",
-  "Kerala",
-  "Gujarat",
-  "Rajasthan",
-  "West Bengal",
-  "Punjab",
-  "Haryana",
-  "Bihar",
-  "Madhya Pradesh",
-  "Odisha",
-  "Jharkhand",
-  "Assam",
-  "Chhattisgarh",
-  "Uttarakhand",
-  "Himachal Pradesh",
-  "Jammu and Kashmir",
-];
+const COUNTRY_CODE = "IN"; // India
 
 const SearchSection = () => {
-  const [bloodGroup, setBloodGroup] = useState("");
-  const [state, setState] = useState("");
-  const [city, setCity] = useState("");
+  const [selectedStateCode, setSelectedStateCode] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [cityName, setCityName] = useState("");
   const [area, setArea] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
 
   const [donors, setDonors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,6 +25,25 @@ const SearchSection = () => {
   const DONORS_PER_PAGE = 6;
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+
+  // Fetch Indian states
+  const indianStates = State.getStatesOfCountry(COUNTRY_CODE);
+
+  // Fetch cities based on selected state
+  const availableCities = selectedStateCode
+    ? City.getCitiesOfState(COUNTRY_CODE, selectedStateCode)
+    : [];
+
+  // Handle State Dropdown Change
+  const handleStateChange = (e) => {
+    const stateCode = e.target.value;
+    setSelectedStateCode(stateCode);
+
+    const targetState = indianStates.find((s) => s.isoCode === stateCode);
+    setStateName(targetState ? targetState.name : "");
+
+    setCityName(""); // Reset city when state changes
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -58,8 +55,8 @@ const SearchSection = () => {
       const res = await api.get("/donors/search", {
         params: {
           bloodGroup,
-          state,
-          city,
+          state: stateName,
+          city: cityName,
           area,
         },
       });
@@ -110,33 +107,41 @@ const SearchSection = () => {
                 </select>
               </div>
 
-              {/* State */}
+              {/* State Dropdown */}
               <div className="search-field">
                 <label htmlFor="state">State</label>
                 <select
                   id="state"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
+                  value={selectedStateCode}
+                  onChange={handleStateChange}
                 >
                   <option value="">Select State</option>
-                  {STATES.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
+                  {indianStates.map((s) => (
+                    <option key={s.isoCode} value={s.isoCode}>
+                      {s.name}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* City (Text Input) */}
+              {/* City Dropdown */}
               <div className="search-field">
                 <label htmlFor="city">City</label>
-                <input
+                <select
                   id="city"
-                  type="text"
-                  placeholder="Enter city"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
+                  value={cityName}
+                  onChange={(e) => setCityName(e.target.value)}
+                  disabled={!selectedStateCode}
+                >
+                  <option value="">
+                    {selectedStateCode ? "Select City" : "Select State First"}
+                  </option>
+                  {availableCities.map((c) => (
+                    <option key={`${c.name}-${c.latitude}`} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Area (Text Input) */}
