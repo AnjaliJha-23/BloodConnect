@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
+import { State, City } from "country-state-city";
 import api from "../../services/api";
 import "./BloodRequests.css";
 import toast from "react-hot-toast";
 
-// List of States
-const STATES = [
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi / NCR"
-];
+const COUNTRY_CODE = "IN"; // India
 
 // Blood Compatibility Matrix: [Donor Group] -> [Allowed Recipient Groups]
 const COMPATIBILITY_MAP = {
@@ -21,7 +15,7 @@ const COMPATIBILITY_MAP = {
   "B-": ["B-", "B+", "AB-", "AB+"],
   "B+": ["B+", "AB+"],
   "AB-": ["AB-", "AB+"],
-  "AB+": ["AB+"]
+  "AB+": ["AB+"],
 };
 
 function BloodRequests() {
@@ -29,13 +23,25 @@ function BloodRequests() {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Filter States
-  const [selectedState, setSelectedState] = useState("");
+  // Selected request for the detail modal
+  const [selectedRequest, setSelectedRequest] = useState(null);
+
+  // Filter States using ISO Codes and Names
+  const [selectedStateCode, setSelectedStateCode] = useState("");
+  const [selectedStateName, setSelectedStateName] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
 
   // Pagination State (5 items per page)
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  // Fetch States from country-state-city
+  const indianStates = State.getStatesOfCountry(COUNTRY_CODE);
+
+  // Fetch Cities dependent on selected state
+  const availableCities = selectedStateCode
+    ? City.getCitiesOfState(COUNTRY_CODE, selectedStateCode)
+    : [];
 
   // Fetch Requests & Current User Profile
   const fetchData = async () => {
@@ -43,15 +49,16 @@ function BloodRequests() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      // Fetch requests
+      // Fetch requests (handles both direct array or wrapped responses)
       const res = await api.get("/requests");
-      setRequests(res.data);
+      const requestData = Array.isArray(res.data) ? res.data : res.data.requests || [];
+      setRequests(requestData);
 
       // Fetch user profile if logged in
       if (token) {
         try {
           const profileRes = await api.get("/users/profile", {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           });
           setUserProfile(profileRes.data);
         } catch (pErr) {
@@ -70,11 +77,25 @@ function BloodRequests() {
     fetchData();
   }, []);
 
-  // Filter requests based on selected State & City text search
+  // Handle State Dropdown Selection
+  const handleStateChange = (e) => {
+    const isoCode = e.target.value;
+    setSelectedStateCode(isoCode);
+
+    const matchedState = indianStates.find((s) => s.isoCode === isoCode);
+    setSelectedStateName(matchedState ? matchedState.name : "");
+
+    setSelectedCity(""); // Reset city when state changes
+    setCurrentPage(1); // Reset pagination
+  };
+
+  // Filter requests based on selected State & City
   const filteredRequests = requests.filter((request) => {
-    const matchesState = selectedState ? request.state === selectedState : true;
+    const matchesState = selectedStateName
+      ? request.state === selectedStateName
+      : true;
     const matchesCity = selectedCity
-      ? request.city?.toLowerCase().includes(selectedCity.toLowerCase())
+      ? request.city?.toLowerCase() === selectedCity.toLowerCase()
       : true;
     return matchesState && matchesCity;
   });
@@ -82,7 +103,10 @@ function BloodRequests() {
   // Calculate Pagination Slices
   const totalPages = Math.ceil(filteredRequests.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
+  const currentRequests = filteredRequests.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -109,7 +133,10 @@ function BloodRequests() {
     const recipientBloodGroup = request.bloodGroup;
 
     if (donorBloodGroup) {
-      const isCompatible = checkCompatibility(donorBloodGroup, recipientBloodGroup);
+      const isCompatible = checkCompatibility(
+        donorBloodGroup,
+        recipientBloodGroup
+      );
 
       if (!isCompatible) {
         toast.error(
@@ -133,9 +160,19 @@ function BloodRequests() {
 
       toast.success("Response Sent Successfully ❤️");
       fetchData(); // Refresh requests list
+      setSelectedRequest(null); // Close modal if open
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to submit response.");
+      toast.error(
+        err.response?.data?.message || "Failed to submit response."
+      );
     }
+  };
+
+  // Helper to retrieve patient age, favoring patientAge key
+  const getPatientAge = (req) => {
+    if (!req) return null;
+    const age = req.patientAge ?? req.age ?? null;
+    return age !== null && age !== "" ? age : null;
   };
 
   if (loading) {
@@ -148,37 +185,44 @@ function BloodRequests() {
 
       {/* Filter Controls */}
       <div className="filters-container">
+        {/* State Select */}
         <div className="filter-group">
           <label htmlFor="state-select">Filter by State:</label>
           <select
             id="state-select"
-            value={selectedState}
-            onChange={(e) => {
-              setSelectedState(e.target.value);
-              setCurrentPage(1); // Reset page on filter
-            }}
+            value={selectedStateCode}
+            onChange={handleStateChange}
           >
             <option value="">All States</option>
-            {STATES.map((s) => (
-              <option key={s} value={s}>
-                {s}
+            {indianStates.map((s) => (
+              <option key={s.isoCode} value={s.isoCode}>
+                {s.name}
               </option>
             ))}
           </select>
         </div>
 
+        {/* City Select Dropdown */}
         <div className="filter-group">
-          <label htmlFor="city-input">Filter by City:</label>
-          <input
-            id="city-input"
-            type="text"
-            placeholder="Type city name..."
+          <label htmlFor="city-select">Filter by City:</label>
+          <select
+            id="city-select"
             value={selectedCity}
             onChange={(e) => {
               setSelectedCity(e.target.value);
-              setCurrentPage(1); // Reset page on filter
+              setCurrentPage(1); // Reset page on filter change
             }}
-          />
+            disabled={!selectedStateCode}
+          >
+            <option value="">
+              {selectedStateCode ? "All Cities" : "Select State First"}
+            </option>
+            {availableCities.map((c) => (
+              <option key={`${c.name}-${c.latitude}`} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -190,29 +234,29 @@ function BloodRequests() {
               <table className="requests-table">
                 <thead>
                   <tr>
-                    <th>Patient</th>
+                    <th>Patient Name</th>
                     <th>Blood Group</th>
-                    <th>Units</th>
-                    <th>Hospital & Location</th>
-                    <th>Reason / Condition</th>
-                    <th>Contact</th>
+                    <th>State</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th style={{ textAlign: "center" }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentRequests.map((request) => {
-                    // Extract and normalize status from MongoDB
-                    const rawStatus = request.status || (request.isCompleted ? "Completed" : "Open");
-                    const normalizedStatus = String(rawStatus).trim().toLowerCase();
-
-                    // Check if status represents a completed request
-                    const isCompleted = normalizedStatus === "completed" || request.isCompleted === true;
-
-                    // Display label formatting
+                    const rawStatus =
+                      request.status ||
+                      (request.isCompleted ? "Completed" : "Open");
+                    const normalizedStatus = String(rawStatus)
+                      .trim()
+                      .toLowerCase();
+                    const isCompleted =
+                      normalizedStatus === "completed" ||
+                      request.isCompleted === true;
                     const displayStatus = isCompleted
                       ? "Completed"
                       : rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1);
+
+                    const patientAge = getPatientAge(request);
 
                     return (
                       <tr
@@ -221,49 +265,40 @@ function BloodRequests() {
                       >
                         <td className="patient-name-cell">
                           <strong>{request.patientName}</strong>
-                        </td>
-                        <td>
-                          <span className="blood-badge">{request.bloodGroup}</span>
-                        </td>
-                        <td>
-                          <strong>{request.units}</strong> Unit(s)
-                        </td>
-                        <td>
-                          <div className="hospital-info">
-                            <strong>{request.hospital}</strong>
-                            <small>{request.city}, {request.state}</small>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="reason-info">
-                            <span>
-                              {request.reason === "Other"
-                                ? request.otherReason
-                                : request.reason}
+                          {patientAge !== null && (
+                            <span
+                              style={{
+                                fontSize: "0.85em",
+                                color: "#666",
+                                marginLeft: "6px",
+                              }}
+                            >
+                              ({patientAge} yrs)
                             </span>
-                            <small>Condition: {request.condition}</small>
-                          </div>
+                          )}
                         </td>
-                        <td>{request.contact}</td>
                         <td>
-                          {/* Dynamic Status Badge */}
-                          <span className={`status-badge status-${normalizedStatus}`}>
-                            {displayStatus}
+                          <span className="blood-badge">
+                            {request.bloodGroup}
                           </span>
                         </td>
                         <td>
-                          {isCompleted ? (
-                            <span className="completed-action-btn">
-                              ✓ Completed
-                            </span>
-                          ) : (
-                            <button
-                              className="respond-btn"
-                              onClick={() => handleRespond(request)}
-                            >
-                              ❤️ I Can Donate
-                            </button>
-                          )}
+                          <strong>{request.state || "N/A"}</strong>
+                        </td>
+                        <td>
+                          <span
+                            className={`status-badge status-${normalizedStatus}`}
+                          >
+                            {displayStatus}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <button
+                            className="view-details-btn"
+                            onClick={() => setSelectedRequest(request)}
+                          >
+                            👁️ View Details
+                          </button>
                         </td>
                       </tr>
                     );
@@ -288,8 +323,9 @@ function BloodRequests() {
                     (pageNum) => (
                       <button
                         key={pageNum}
-                        className={`pagination-number ${currentPage === pageNum ? "active" : ""
-                          }`}
+                        className={`pagination-number ${
+                          currentPage === pageNum ? "active" : ""
+                        }`}
                         onClick={() => handlePageChange(pageNum)}
                       >
                         {pageNum}
@@ -314,6 +350,104 @@ function BloodRequests() {
           </p>
         )}
       </div>
+
+      {/* POPUP MODAL CARD FOR DETAILED VIEW */}
+      {selectedRequest && (
+        <div className="modal-backdrop" onClick={() => setSelectedRequest(null)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="modal-close-btn"
+              onClick={() => setSelectedRequest(null)}
+            >
+              ✕
+            </button>
+
+            <div className="modal-header">
+              <span className="modal-blood-badge">
+                {selectedRequest.bloodGroup}
+              </span>
+              <h3>{selectedRequest.patientName}</h3>
+              {getPatientAge(selectedRequest) !== null && (
+                <span className="modal-patient-age">
+                  {getPatientAge(selectedRequest)} Yrs Old
+                </span>
+              )}
+            </div>
+
+            <div className="modal-details-grid">
+              <div className="compat-item">
+                <span className="compat-title">Patient Age</span>
+                <span className="compat-val">
+                  {getPatientAge(selectedRequest) !== null
+                    ? `${getPatientAge(selectedRequest)} Years`
+                    : "N/A"}
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">Units Required</span>
+                <span className="compat-val">
+                  {selectedRequest.units} Unit(s)
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">Hospital</span>
+                <span className="compat-val">
+                  {selectedRequest.hospital || "N/A"}
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">City & State</span>
+                <span className="compat-val">
+                  {selectedRequest.city ? `${selectedRequest.city}, ` : ""}
+                  {selectedRequest.state || "N/A"}
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">Medical Condition</span>
+                <span className="compat-val">
+                  {selectedRequest.condition || "N/A"}
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">Reason</span>
+                <span className="compat-val">
+                  {selectedRequest.reason === "Other"
+                    ? selectedRequest.otherReason
+                    : selectedRequest.reason || "N/A"}
+                </span>
+              </div>
+
+              <div className="compat-item">
+                <span className="compat-title">Contact Person</span>
+                <span className="compat-val">
+                  {selectedRequest.contact || "N/A"}
+                </span>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              {selectedRequest.status === "completed" ||
+              selectedRequest.isCompleted ? (
+                <span className="completed-action-btn">
+                  ✓ Request Completed
+                </span>
+              ) : (
+                <button
+                  className="respond-btn"
+                  onClick={() => handleRespond(selectedRequest)}
+                >
+                  ❤️ I Can Donate
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

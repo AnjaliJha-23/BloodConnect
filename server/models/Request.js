@@ -8,6 +8,11 @@ const RequestSchema = new mongoose.Schema(
       trim: true,
     },
 
+    patientAge: {
+      type: Number,
+      required: true,
+    },
+
     bloodGroup: {
       type: String,
       required: true,

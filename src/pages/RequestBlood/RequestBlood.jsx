@@ -12,6 +12,7 @@ function RequestBlood() {
 
   const [formData, setFormData] = useState({
     patientName: "",
+    patientAge: "", // Added age state
     bloodGroup: "",
     hospital: "",
     state: "",
@@ -76,6 +77,7 @@ function RequestBlood() {
 
     const payload = {
       ...formData,
+      patientAge: Number(formData.patientAge), // Converted to Number for API payload
       reason:
         formData.reason === "Other"
           ? formData.otherReason
@@ -95,6 +97,7 @@ function RequestBlood() {
 
       setFormData({
         patientName: "",
+        patientAge: "",
         bloodGroup: "",
         hospital: "",
         state: "",
@@ -120,6 +123,7 @@ function RequestBlood() {
         <h2>Emergency Blood Request</h2>
 
         <form onSubmit={handleSubmit}>
+          {/* Patient Name */}
           <input
             name="patientName"
             placeholder="Patient Name"
@@ -128,6 +132,19 @@ function RequestBlood() {
             required
           />
 
+          {/* Patient Age Input */}
+          <input
+            type="text"
+            name="patientAge"
+            placeholder="Patient Age (Yrs)"
+            value={formData.patientAge}
+            onChange={handleChange}
+            maxLength={3}
+            inputMode="numeric"
+            required
+          />
+
+          {/* Blood Group */}
           <select
             name="bloodGroup"
             value={formData.bloodGroup}
@@ -145,6 +162,7 @@ function RequestBlood() {
             <option value="O-">O-</option>
           </select>
 
+          {/* Hospital */}
           <input
             name="hospital"
             placeholder="Hospital"
@@ -197,6 +215,7 @@ function RequestBlood() {
             ))}
           </select>
 
+          {/* Units Required */}
           <input
             type="text"
             name="units"
@@ -215,6 +234,7 @@ function RequestBlood() {
             required
           />
 
+          {/* Contact Number */}
           <input
             type="tel"
             name="contact"
@@ -234,7 +254,9 @@ function RequestBlood() {
             pattern="[0-9]{10}"
             required
           />
-                    <label htmlFor="condition">Patient Condition</label>
+
+          {/* Patient Condition */}
+          <label htmlFor="condition">Patient Condition</label>
           <select
             id="condition"
             name="condition"
@@ -249,6 +271,7 @@ function RequestBlood() {
             <option value="Life Threatening">Life Threatening</option>
           </select>
 
+          {/* Reason for Requirement */}
           <label htmlFor="reason">Reason for Blood Requirement</label>
           <select
             id="reason"
@@ -282,6 +305,7 @@ function RequestBlood() {
             />
           )}
 
+          {/* Additional Details */}
           <textarea
             name="message"
             placeholder="Additional Details"
