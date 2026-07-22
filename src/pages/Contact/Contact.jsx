@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaClock, FaPaperPlane } from 'react-icons/fa'
+import axios from "axios";
+import toast from "react-hot-toast";
 import './Contact.css'
 
 const CONTACT_CARDS = [
@@ -26,12 +28,34 @@ const Contact = () => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Contact form submitted:', form)
-    setSubmitted(true)
-  }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/contact",
+      form
+    );
+
+    toast.success(response.data.message);
+
+    setSubmitted(true);
+
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    toast.error(
+      error.response?.data?.message || "Failed to send message!"
+    );
+  }
+};
   return (
     <>
       <section className="contact-hero">
