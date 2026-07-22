@@ -1,36 +1,42 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-module.exports = function(req,res,next){
+const protect = async (req, res, next) => {
+  const token = req.header("Authorization");
 
-    const token = req.header("Authorization");
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "No token provided",
+    });
+  }
 
-    if(!token){
+  try {
+    const decoded = jwt.verify(
+      token.replace("Bearer ", ""),
+      process.env.JWT_SECRET
+    );
 
-        return res.status(401).json({
-            message:"No Token"
-        });
+    const user = await User.findById(decoded.id).select("-password");
 
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    try{
+    req.user = user;
 
-        const decoded = jwt.verify(
-            token.replace("Bearer ",""),
-            process.env.JWT_SECRET
-        );
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid token",
+    });
+  }
+};
 
-        req.user = decoded;
-
-        next();
-
-    }
-
-    catch(err){
-
-        res.status(401).json({
-            message:"Invalid Token"
-        });
-
-    }
-
-}
+module.exports = {
+  protect,
+};

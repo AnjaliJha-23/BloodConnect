@@ -1,6 +1,8 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminRoute from "./components/ProtectedRoute/AdminRoute";
 
 import Profile from "./pages/Profile/Profile";
 import Home from "./pages/Home/Home";
@@ -59,6 +61,16 @@ function App() {
                 <ProfileProtectedRoute>
                   <RequestBlood />
                 </ProfileProtectedRoute>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
               </ProtectedRoute>
             }
           />

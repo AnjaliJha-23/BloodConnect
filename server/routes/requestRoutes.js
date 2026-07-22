@@ -1,8 +1,8 @@
 const express = require("express");
 
 const router = express.Router();
+const { protect } = require("../middleware/authMiddleware");
 
-const auth = require("../middleware/authMiddleware");
 
 const {
 
@@ -19,16 +19,16 @@ const {
 
 } = require("../controllers/requestController");
 
-router.post("/", auth, createRequest);
+router.post("/", protect, createRequest);
 
 router.get("/", getRequests);
 
-router.get("/mine", auth, getMyRequests);
+router.get("/mine", protect, getMyRequests);
 
-router.delete("/:id", auth, deleteRequest);
+router.delete("/:id", protect, deleteRequest);
 
-router.put("/:id/complete", auth, completeRequest);
+router.put("/:id/complete", protect, completeRequest);
 
-router.put("/:id/respond", auth, respondToRequest);
+router.put("/:id/respond", protect, respondToRequest);
 
 module.exports = router;

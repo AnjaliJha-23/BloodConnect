@@ -152,6 +152,7 @@ img {
   box-shadow: 0 12px 28px rgba(0,0,0,0.18);
 }
 
+
 @media (max-width: 768px) {
   .section {
     padding: 64px 0;
