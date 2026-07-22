@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 import UserTable from "../../components/Admin/UserTable";
 import api from "../../services/api";
+import toast from "react-hot-toast";
 
 const USERS_PER_PAGE = 5;
 
@@ -25,6 +26,7 @@ function Users() {
       setUsers(res.data.users);
     } catch (err) {
       console.error(err);
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -34,12 +36,35 @@ function Users() {
     fetchUsers();
   }, []);
 
-  // Reset to page 1 whenever search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [search]);
 
-  // Filter users
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.delete(`/admin/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast.success("User deleted successfully");
+
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      toast.error("Unable to delete user");
+    }
+  };
+
   const filteredUsers = useMemo(() => {
     return users.filter(
       (user) =>
@@ -48,7 +73,6 @@ function Users() {
     );
   }, [users, search]);
 
-  // Pagination
   const totalPages = Math.ceil(
     filteredUsers.length / USERS_PER_PAGE
   );
@@ -67,30 +91,29 @@ function Users() {
 
         <div className="users-header">
           <h1>Users Management</h1>
-
           <p>Total Users: {filteredUsers.length}</p>
         </div>
 
         <div className="admin-toolbar">
-
           <input
             type="text"
-            placeholder="Search by name or email..."
             className="admin-search"
+            placeholder="Search by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-
         </div>
 
         {loading ? (
           <h3>Loading...</h3>
         ) : (
           <>
-            <UserTable users={currentUsers} />
+            <UserTable
+              users={currentUsers}
+              onDelete={handleDelete}
+            />
 
             <div className="pagination">
-
               <button
                 disabled={currentPage === 1}
                 onClick={() =>
@@ -115,7 +138,6 @@ function Users() {
               >
                 Next
               </button>
-
             </div>
           </>
         )}
