@@ -1,0 +1,127 @@
+import { useEffect, useMemo, useState } from "react";
+import AdminLayout from "../../components/Admin/AdminLayout";
+import UserTable from "../../components/Admin/UserTable";
+import api from "../../services/api";
+
+const USERS_PER_PAGE = 5;
+
+function Users() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await api.get("/admin/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUsers(res.data.users);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // Reset to page 1 whenever search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // Filter users
+  const filteredUsers = useMemo(() => {
+    return users.filter(
+      (user) =>
+        user.name.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [users, search]);
+
+  // Pagination
+  const totalPages = Math.ceil(
+    filteredUsers.length / USERS_PER_PAGE
+  );
+
+  const indexOfLast = currentPage * USERS_PER_PAGE;
+  const indexOfFirst = indexOfLast - USERS_PER_PAGE;
+
+  const currentUsers = filteredUsers.slice(
+    indexOfFirst,
+    indexOfLast
+  );
+
+  return (
+    <AdminLayout>
+      <div className="users-page">
+
+        <div className="users-header">
+          <h1>Users Management</h1>
+
+          <p>Total Users: {filteredUsers.length}</p>
+        </div>
+
+        <div className="admin-toolbar">
+
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            className="admin-search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+        </div>
+
+        {loading ? (
+          <h3>Loading...</h3>
+        ) : (
+          <>
+            <UserTable users={currentUsers} />
+
+            <div className="pagination">
+
+              <button
+                disabled={currentPage === 1}
+                onClick={() =>
+                  setCurrentPage((prev) => prev - 1)
+                }
+              >
+                Previous
+              </button>
+
+              <span>
+                Page {currentPage} of {totalPages || 1}
+              </span>
+
+              <button
+                disabled={
+                  currentPage === totalPages ||
+                  totalPages === 0
+                }
+                onClick={() =>
+                  setCurrentPage((prev) => prev + 1)
+                }
+              >
+                Next
+              </button>
+
+            </div>
+          </>
+        )}
+      </div>
+    </AdminLayout>
+  );
+}
+
+export default Users;

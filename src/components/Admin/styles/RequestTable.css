@@ -1,0 +1,62 @@
+.admin-table-container{
+    margin-top:25px;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.admin-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.admin-table th{
+    background:#ef4444;
+    color:white;
+    padding:18px;
+    text-align:left;
+}
+
+.admin-table td{
+    padding:18px;
+    border-bottom:1px solid #eee;
+}
+.status-open{
+    color:#2e7d32;
+    font-weight:600;
+}
+
+.status-completed{
+    color:#c62828;
+    font-weight:600;
+}
+.complete-btn{
+
+background:#2e7d32;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+.reopen-btn{
+
+background:#ef6c00;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+.complete-btn:hover{
+opacity:.9;
+}
+
+.reopen-btn:hover{
+opacity:.9;
+}

@@ -2,7 +2,7 @@ import "./styles/AdminNavbar.css";
 
 function AdminNavbar() {
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <header className="admin-navbar">

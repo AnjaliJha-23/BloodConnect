@@ -38,9 +38,7 @@ exports.getDashboardStats = async (req, res) => {
 };
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find()
-      .select("-password")
-      .sort({ createdAt: -1 });
+    const users = await User.find().select("-password").sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -48,6 +46,132 @@ exports.getAllUsers = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+exports.getAllRequests = async (req, res) => {
+  try {
+    const requests = await Request.find()
+      .populate("createdBy", "name email phone")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      requests,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+exports.updateRequestStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const request = await Request.findById(id);
+
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Request not found",
+      });
+    }
+
+    request.status = status;
+
+    await request.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Request status updated successfully",
+      request,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+exports.getAnalytics = async (req, res) => {
+  try {
+    // Summary Stats
+    const totalUsers = await User.countDocuments();
+
+    const availableDonors = await User.countDocuments({
+      available: true,
+    });
+
+    const openRequests = await Request.countDocuments({
+      status: "Open",
+    });
+
+    const completedRequests = await Request.countDocuments({
+      status: "Completed",
+    });
+
+    // Blood Group Distribution
+    const bloodGroups = await User.aggregate([
+      {
+        $match: {
+          bloodGroup: { $ne: "" },
+        },
+      },
+      {
+        $group: {
+          _id: "$bloodGroup",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+    ]);
+
+    // Request Status Distribution
+    const requestStatus = await Request.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Monthly User Registrations
+    const monthlyUsers = await User.aggregate([
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+
+      summary: {
+        totalUsers,
+        availableDonors,
+        openRequests,
+        completedRequests,
+      },
+
+      bloodGroups,
+      requestStatus,
+      monthlyUsers,
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error.message,
     });
