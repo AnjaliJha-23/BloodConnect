@@ -200,6 +200,12 @@ const Navbar = () => {
           <div className="navbar-auth navbar-auth-mobile">
             {user ? (
               <>
+                {user?.role === "admin" && (
+                  <Link to="/admin" className="btn btn-primary navbar-btn-sm">
+                    Admin Panel
+                  </Link>
+                )}
+
                 <Link to="/dashboard" className="btn btn-outline navbar-btn-sm">
                   Dashboard
                 </Link>
@@ -228,6 +234,12 @@ const Navbar = () => {
         <div className="navbar-auth">
           {user ? (
             <>
+              {user?.role === "admin" && (
+                <Link to="/admin" className="btn btn-primary navbar-btn-sm">
+                  Admin Panel
+                </Link>
+              )}
+
               <Link to="/dashboard" className="btn btn-outline navbar-btn-sm">
                 Dashboard
               </Link>

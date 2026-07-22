@@ -70,9 +70,11 @@
   gap: 12px;
 }
 
-.navbar-btn-sm {
-  padding: 10px 22px;
-  font-size: 0.92rem;
+.navbar-btn-sm{
+    padding:8px 18px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:600;
 }
 
 .navbar-toggle {

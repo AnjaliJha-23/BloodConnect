@@ -16,10 +16,10 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import RequestBlood from "./pages/RequestBlood/RequestBlood";
 import ProfileProtectedRoute from "./components/ProtectedRoutes/ProfileProtectedRoute";
 import MyRequests from "./pages/MyRequests/MyRequests";
-import AdminProtectedRoute from "./components/ProtectedRoutes/AdminProtectedRoute";
+//import AdminProtectedRoute from "./components/ProtectedRoutes/AdminProtectedRoute";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import BloodRequests from "./pages/Admin/BloodRequests";
+//import BloodRequests from "./pages/Admin/BloodRequests";
 import Analytics from "./pages/Admin/Analytics";
 
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
@@ -93,16 +93,33 @@ function App() {
             path="/admin/users"
             element={
               <ProtectedRoute>
-                <AdminProtectedRoute>
+                <AdminRoute>
                   <Users />
-                </AdminProtectedRoute>
+                </AdminRoute>
               </ProtectedRoute>
             }
           />
-          <Route path="/admin/requests" element={<Requests />} />
-          <Route path="/admin/requests" element={<BloodRequests />} />
+          <Route
+            path="/admin/requests"
+            element={
+              <ProtectedRoute>
+                <AdminRoute>
+                  <Requests />
+                </AdminRoute>
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/admin/analytics" element={<Analytics />} />
+          <Route
+            path="/admin/analytics"
+            element={
+              <ProtectedRoute>
+                <AdminRoute>
+                  <Analytics />
+                </AdminRoute>
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
