@@ -3,11 +3,13 @@ import api from "../../services/api";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { State, City } from "country-state-city";
 
 function Profile() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    name: "",
     phone: "",
     bloodGroup: "",
     age: "",
@@ -41,10 +43,19 @@ function Profile() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    setFormData({
-      ...formData,
+    if (name === "state") {
+      setFormData((prev) => ({
+        ...prev,
+        state: value,
+        city: "",
+      }));
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -61,7 +72,6 @@ function Profile() {
 
       toast.success("Profile updated successfully!");
 
-      // Update localStorage
       const updatedUser = await api.get("/users/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -71,12 +81,19 @@ function Profile() {
       localStorage.setItem("user", JSON.stringify(updatedUser.data));
       window.dispatchEvent(new Event("storage"));
 
-      // Redirect to Home
       navigate("/");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to update profile.");
     }
   };
+
+  const selectedState = State.getStatesOfCountry("IN").find(
+    (state) => state.name === formData.state
+  );
+
+  const cities = selectedState
+    ? City.getCitiesOfState("IN", selectedState.isoCode)
+    : [];
 
   return (
     <div className="profile-container">
@@ -84,6 +101,14 @@ function Profile() {
         <h2>Edit Profile</h2>
 
         <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            value={formData.name || ""}
+            onChange={handleChange}
+          />
+
           <input
             type="tel"
             name="phone"
@@ -99,7 +124,8 @@ function Profile() {
           <select
             name="bloodGroup"
             value={formData.bloodGroup || ""}
-            onChange={handleChange}>
+            onChange={handleChange}
+          >
             <option value="">Select Blood Group</option>
             <option>A+</option>
             <option>A-</option>
@@ -122,33 +148,49 @@ function Profile() {
           <select
             name="gender"
             value={formData.gender || ""}
-            onChange={handleChange}>
-            <option value="">Gender</option>
+            onChange={handleChange}
+          >
+            <option value="">Select Gender</option>
             <option>Male</option>
             <option>Female</option>
             <option>Other</option>
           </select>
 
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            value={formData.city || ""}
-            onChange={handleChange}
-          />
-
-          <input
-            type="text"
+          {/* State Dropdown */}
+          <select
             name="state"
-            placeholder="State"
             value={formData.state || ""}
             onChange={handleChange}
-          />
+          >
+            <option value="">Select State</option>
+
+            {State.getStatesOfCountry("IN").map((state) => (
+              <option key={state.isoCode} value={state.name}>
+                {state.name}
+              </option>
+            ))}
+          </select>
+
+          {/* City Dropdown */}
+          <select
+            name="city"
+            value={formData.city || ""}
+            onChange={handleChange}
+            disabled={!formData.state}
+          >
+            <option value="">Select City</option>
+
+            {cities.map((city) => (
+              <option key={city.name} value={city.name}>
+                {city.name}
+              </option>
+            ))}
+          </select>
 
           <input
             type="text"
             name="area"
-            placeholder="Example: Dwarka, Salt Lake, Koramangala"
+            placeholder="Area / Locality"
             value={formData.area || ""}
             onChange={handleChange}
           />

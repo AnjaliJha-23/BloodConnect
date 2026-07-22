@@ -4,6 +4,7 @@ import api from "../../services/api";
 import { isProfileComplete } from "../../utils/profileComplete";
 import "./RequestBlood.css";
 import toast from "react-hot-toast";
+import { State, City } from "country-state-city";
 
 function RequestBlood() {
   const navigate = useNavigate();
@@ -23,111 +24,13 @@ function RequestBlood() {
     message: "",
   });
 
-  const STATES = [
-    "Delhi",
-    "Maharashtra",
-    "Uttar Pradesh",
-    "Karnataka",
-    "Tamil Nadu",
-    "Telangana",
-    "Andhra Pradesh",
-    "Kerala",
-    "Gujarat",
-    "Rajasthan",
-    "West Bengal",
-    "Punjab",
-    "Haryana",
-    "Bihar",
-    "Madhya Pradesh",
-    "Odisha",
-    "Jharkhand",
-    "Assam",
-    "Chhattisgarh",
-    "Uttarakhand",
-    "Himachal Pradesh",
-    "Jammu and Kashmir",
-  ];
-
-  const STATE_CITIES = {
-    Delhi: [
-      "New Delhi",
-      "North Delhi",
-      "South Delhi",
-      "East Delhi",
-      "West Delhi",
-    ],
-
-    Maharashtra: [
-      "Mumbai",
-      "Pune",
-      "Nagpur",
-      "Nashik",
-      "Thane",
-      "Aurangabad",
-      "Kolhapur",
-    ],
-
-    "Uttar Pradesh": [
-      "Lucknow",
-      "Kanpur",
-      "Agra",
-      "Varanasi",
-      "Prayagraj",
-      "Noida",
-      "Ghaziabad",
-      "Meerut",
-      "Gorakhpur",
-    ],
-
-    Karnataka: ["Bangalore", "Mysore", "Hubli", "Mangalore", "Belgaum"],
-
-    "Tamil Nadu": [
-      "Chennai",
-      "Coimbatore",
-      "Madurai",
-      "Salem",
-      "Tiruchirappalli",
-    ],
-
-    Telangana: ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad"],
-
-    "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Tirupati"],
-
-    Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
-
-    Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-
-    Rajasthan: ["Jaipur", "Jodhpur", "Udaipur", "Kota"],
-
-    "West Bengal": ["Kolkata", "Howrah", "Durgapur", "Siliguri"],
-
-    Punjab: ["Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
-
-    Haryana: ["Gurugram", "Faridabad", "Panipat", "Hisar"],
-
-    Bihar: ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"],
-
-    "Madhya Pradesh": ["Bhopal", "Indore", "Jabalpur", "Gwalior"],
-
-    Odisha: ["Bhubaneswar", "Cuttack", "Rourkela", "Sambalpur"],
-
-    Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
-
-    Assam: ["Guwahati", "Silchar", "Dibrugarh", "Tezpur"],
-
-    Chhattisgarh: ["Raipur", "Bilaspur", "Durg", "Korba"],
-
-    Uttarakhand: ["Dehradun", "Haridwar", "Haldwani", "Roorkee"],
-
-    "Himachal Pradesh": ["Shimla", "Dharamshala", "Solan", "Mandi"],
-
-    "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla"],
-  };
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        /*const res = await api.get("/users/profile", {
+
+        /*
+        const res = await api.get("/users/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -143,9 +46,8 @@ function RequestBlood() {
           }, 800);
 
           return;
-          navigate("/profile");
-          return;
-        }*/
+        }
+        */
       } catch (err) {
         console.log("Error fetching profile:", err);
       }
@@ -161,14 +63,23 @@ function RequestBlood() {
     });
   };
 
+  const selectedState = State.getStatesOfCountry("IN").find(
+    (state) => state.name === formData.state
+  );
+
+  const cityList = selectedState
+    ? City.getCitiesOfState("IN", selectedState.isoCode)
+    : [];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare payload: if "Other" is selected, use the custom text from otherReason
     const payload = {
       ...formData,
       reason:
-        formData.reason === "Other" ? formData.otherReason : formData.reason,
+        formData.reason === "Other"
+          ? formData.otherReason
+          : formData.reason,
     };
 
     try {
@@ -198,8 +109,8 @@ function RequestBlood() {
     } catch (err) {
       console.error(err);
       toast.error(
-  err.response?.data?.message || "Failed to submit blood request."
-);
+        err.response?.data?.message || "Failed to submit blood request."
+      );
     }
   };
 
@@ -221,7 +132,8 @@ function RequestBlood() {
             name="bloodGroup"
             value={formData.bloodGroup}
             onChange={handleChange}
-            required>
+            required
+          >
             <option value="">Select Blood Group</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -240,6 +152,8 @@ function RequestBlood() {
             onChange={handleChange}
             required
           />
+
+          {/* State Dropdown */}
           <select
             name="state"
             value={formData.state}
@@ -250,32 +164,37 @@ function RequestBlood() {
                 city: "",
               });
             }}
-            required>
+            required
+          >
             <option value="">Select State</option>
 
-            {STATES.map((state) => (
-              <option key={state} value={state}>
-                {state}
+            {State.getStatesOfCountry("IN").map((state) => (
+              <option key={state.isoCode} value={state.name}>
+                {state.name}
               </option>
             ))}
           </select>
 
+          {/* City Dropdown */}
           <select
             name="city"
             value={formData.city}
             onChange={handleChange}
             disabled={!formData.state}
-            required>
+            required
+          >
             <option value="">
               {formData.state ? "Select City" : "Select State First"}
             </option>
 
-            {formData.state &&
-              STATE_CITIES[formData.state]?.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
+            {cityList.map((city) => (
+              <option
+                key={`${city.name}-${city.stateCode}`}
+                value={city.name}
+              >
+                {city.name}
+              </option>
+            ))}
           </select>
 
           <input
@@ -315,14 +234,14 @@ function RequestBlood() {
             pattern="[0-9]{10}"
             required
           />
-
-          <label htmlFor="condition">Patient Condition</label>
+                    <label htmlFor="condition">Patient Condition</label>
           <select
             id="condition"
             name="condition"
             value={formData.condition}
             onChange={handleChange}
-            required>
+            required
+          >
             <option value="">Select Patient Condition</option>
             <option value="Stable">Stable</option>
             <option value="Urgent">Urgent</option>
@@ -336,7 +255,8 @@ function RequestBlood() {
             name="reason"
             value={formData.reason}
             onChange={handleChange}
-            required>
+            required
+          >
             <option value="">Select Reason</option>
             <option value="Accident">Accident</option>
             <option value="Disease">Disease</option>
