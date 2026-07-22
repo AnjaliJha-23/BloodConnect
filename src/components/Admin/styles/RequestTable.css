@@ -60,3 +60,16 @@ opacity:.9;
 .reopen-btn:hover{
 opacity:.9;
 }
+.delete-btn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:8px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-left:8px;
+}
+
+.delete-btn:hover{
+    opacity:.9;
+}
