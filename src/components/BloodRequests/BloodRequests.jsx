@@ -51,7 +51,9 @@ function BloodRequests() {
 
       // Fetch requests (handles both direct array or wrapped responses)
       const res = await api.get("/requests");
-      const requestData = Array.isArray(res.data) ? res.data : res.data.requests || [];
+      const requestData = Array.isArray(res.data)
+        ? res.data
+        : res.data.requests || [];
       setRequests(requestData);
 
       // Fetch user profile if logged in
@@ -105,7 +107,7 @@ function BloodRequests() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentRequests = filteredRequests.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const handlePageChange = (newPage) => {
@@ -135,13 +137,13 @@ function BloodRequests() {
     if (donorBloodGroup) {
       const isCompatible = checkCompatibility(
         donorBloodGroup,
-        recipientBloodGroup
+        recipientBloodGroup,
       );
 
       if (!isCompatible) {
         toast.error(
           `You are not compatible! Your blood group is (${donorBloodGroup}), but patient needs (${recipientBloodGroup}).`,
-          { duration: 5000 }
+          { duration: 5000 },
         );
         return;
       }
@@ -155,16 +157,14 @@ function BloodRequests() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       toast.success("Response Sent Successfully ❤️");
       fetchData(); // Refresh requests list
       setSelectedRequest(null); // Close modal if open
     } catch (err) {
-      toast.error(
-        err.response?.data?.message || "Failed to submit response."
-      );
+      toast.error(err.response?.data?.message || "Failed to submit response.");
     }
   };
 
@@ -179,6 +179,32 @@ function BloodRequests() {
     return <h2 className="loading-text">Loading Requests...</h2>;
   }
 
+  const handleDonate = async (request) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await api.put(
+        `/requests/${request._id}/respond`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      alert(res.data.message);
+
+      setSelectedRequest(null);
+    } catch (err) {
+      console.log(err);
+      console.log(err.response);
+      console.log(err.response?.data);
+
+      alert(err.response?.data?.message || "Something went wrong");
+    }
+  };
+
   return (
     <section className="blood-requests">
       <h2>🩸 Active Blood Requests</h2>
@@ -191,8 +217,7 @@ function BloodRequests() {
           <select
             id="state-select"
             value={selectedStateCode}
-            onChange={handleStateChange}
-          >
+            onChange={handleStateChange}>
             <option value="">All States</option>
             {indianStates.map((s) => (
               <option key={s.isoCode} value={s.isoCode}>
@@ -212,8 +237,7 @@ function BloodRequests() {
               setSelectedCity(e.target.value);
               setCurrentPage(1); // Reset page on filter change
             }}
-            disabled={!selectedStateCode}
-          >
+            disabled={!selectedStateCode}>
             <option value="">
               {selectedStateCode ? "All Cities" : "Select State First"}
             </option>
@@ -261,8 +285,7 @@ function BloodRequests() {
                     return (
                       <tr
                         key={request._id}
-                        className={isCompleted ? "row-completed" : ""}
-                      >
+                        className={isCompleted ? "row-completed" : ""}>
                         <td className="patient-name-cell">
                           <strong>{request.patientName}</strong>
                           {patientAge !== null && (
@@ -271,8 +294,7 @@ function BloodRequests() {
                                 fontSize: "0.85em",
                                 color: "#666",
                                 marginLeft: "6px",
-                              }}
-                            >
+                              }}>
                               ({patientAge} yrs)
                             </span>
                           )}
@@ -287,16 +309,14 @@ function BloodRequests() {
                         </td>
                         <td>
                           <span
-                            className={`status-badge status-${normalizedStatus}`}
-                          >
+                            className={`status-badge status-${normalizedStatus}`}>
                             {displayStatus}
                           </span>
                         </td>
                         <td style={{ textAlign: "center" }}>
                           <button
                             className="view-details-btn"
-                            onClick={() => setSelectedRequest(request)}
-                          >
+                            onClick={() => setSelectedRequest(request)}>
                             👁️ View Details
                           </button>
                         </td>
@@ -313,32 +333,30 @@ function BloodRequests() {
                 <button
                   className="pagination-btn"
                   onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
+                  disabled={currentPage === 1}>
                   &laquo; Prev
                 </button>
 
                 <div className="pagination-numbers">
-                  {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-                    (pageNum) => (
-                      <button
-                        key={pageNum}
-                        className={`pagination-number ${
-                          currentPage === pageNum ? "active" : ""
-                        }`}
-                        onClick={() => handlePageChange(pageNum)}
-                      >
-                        {pageNum}
-                      </button>
-                    )
-                  )}
+                  {Array.from(
+                    { length: totalPages },
+                    (_, index) => index + 1,
+                  ).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      className={`pagination-number ${
+                        currentPage === pageNum ? "active" : ""
+                      }`}
+                      onClick={() => handlePageChange(pageNum)}>
+                      {pageNum}
+                    </button>
+                  ))}
                 </div>
 
                 <button
                   className="pagination-btn"
                   onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
+                  disabled={currentPage === totalPages}>
                   Next &raquo;
                 </button>
               </div>
@@ -353,12 +371,13 @@ function BloodRequests() {
 
       {/* POPUP MODAL CARD FOR DETAILED VIEW */}
       {selectedRequest && (
-        <div className="modal-backdrop" onClick={() => setSelectedRequest(null)}>
+        <div
+          className="modal-backdrop"
+          onClick={() => setSelectedRequest(null)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <button
               className="modal-close-btn"
-              onClick={() => setSelectedRequest(null)}
-            >
+              onClick={() => setSelectedRequest(null)}>
               ✕
             </button>
 
@@ -438,9 +457,8 @@ function BloodRequests() {
                 </span>
               ) : (
                 <button
-                  className="respond-btn"
-                  onClick={() => handleRespond(selectedRequest)}
-                >
+                  className="donate-btn"
+                  onClick={() => handleDonate(selectedRequest)}>
                   ❤️ I Can Donate
                 </button>
               )}
