@@ -21,9 +21,9 @@ function SummaryCards({ user, requestsMade }) {
       <div className="summary-card">
         <h3>
             <FaMapMarkerAlt />
-            City
+            State
         </h3>
-        <p>{user.city || "N/A"}</p>
+        <p>{user.state || "N/A"}</p>
       </div>
 
       <div className="summary-card">

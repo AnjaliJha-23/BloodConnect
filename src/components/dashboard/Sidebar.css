@@ -1,110 +1,153 @@
-.sidebar{
-    width:280px;
-    background:#fff;
-    border-radius:18px;
-    padding:30px 20px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-    transition:.3s ease;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+/* Layout Positioning Wrappers */
+.avatar-upload-label {
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 15px;
 }
 
-.sidebar-avatar{
-    width:90px;
-    height:90px;
-
-    border-radius:50%;
-
-    color:#fff;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:38px;
-    font-weight:700;
-
-    margin-bottom:18px;
+.avatar-container {
+  position: relative;
+  width: 100px; /* Base container size */
+  height: 100px;
+  margin: 0 auto;
 }
 
-.sidebar h2{
-    margin:0;
-    font-size:24px;
+/* Core Profile Circle Elements */
+.sidebar-avatar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden; /* Clean circle overflow crop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  font-weight: bold;
+  transition: transform 0.2s ease;
 }
 
-.sidebar-email{
-    color:#666;
-    margin-top:6px;
-    text-align:center;
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.sidebar-divider{
-    width:100%;
-    height:1px;
-    background:#eee;
-    margin:22px 0;
+/* Hover Action Masks */
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
-.sidebar-info{
-    width:100%;
+.avatar-container:hover .avatar-overlay {
+  opacity: 1;
 }
 
-.info-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    margin-bottom:18px;
+/* Floating Pencil Indicator Badges */
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  background-color: #ffffff;
+  color: #333333;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  transition: transform 0.2s ease;
 }
 
-.available{
-    color:green;
+.avatar-container:hover .avatar-edit-badge {
+  transform: scale(1.1);
 }
 
-.unavailable{
-    color:#E53935;
-}
-.info-row span{
-    display:flex;
-    align-items:center;
-    gap:8px;
+/* Base UI Structural Elements */
+.sidebar {
+  padding: 20px;
+  text-align: center;
 }
 
-.info-icon{
-    color:#E53935;
-}
-.status-badge{
-    margin-top:15px;
-
-    padding:8px 16px;
-
-    border-radius:30px;
-
-    font-size:14px;
-
-    font-weight:600;
+.sidebar h2 {
+  margin: 10px 0 5px 0;
+  font-size: 1.5rem;
+  color: #1a202c;
 }
 
-.badge-available{
-    background:#E8F5E9;
-    color:#2E7D32;
+.sidebar-email {
+  color: #718096;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
 }
 
-.badge-unavailable{
-    background:#FFEBEE;
-    color:#C62828;
-}
-.sidebar:hover{
-    transform:translateY(-5px);
-    box-shadow:0 16px 32px rgba(0,0,0,.12);
-}
-
-@media(max-width:992px){
-
-.sidebar{
-    width:100%;
+.status-badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
 }
 
+.badge-available {
+  background-color: #e6fffa;
+  color: #234e52;
+}
+
+.badge-unavailable {
+  background-color: #fff5f5;
+  color: #742a2a;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 20px 0;
+}
+
+/* Detailed Information Row Layouts */
+.sidebar-info {
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.info-row span {
+  display: flex;
+  align-items: center;
+  color: #4a5568;
+}
+
+.info-icon {
+  margin-right: 10px;
+  color: #a0aec0;
+}
+
+.info-icon.available, strong.available {
+  color: #38a169;
+}
+
+.info-icon.unavailable, strong.unavailable {
+  color: #e53e3e;
 }
