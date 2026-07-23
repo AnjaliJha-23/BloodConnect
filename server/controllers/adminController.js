@@ -55,6 +55,7 @@ exports.getAllRequests = async (req, res) => {
   try {
     const requests = await Request.find()
       .populate("createdBy", "name email phone")
+      .populate("responses", "name email phone bloodGroup")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
