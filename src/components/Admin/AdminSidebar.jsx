@@ -4,6 +4,7 @@ import {
   FaUsers,
   FaTint,
   FaChartLine,
+  FaEnvelope,
   FaSignOutAlt,
 } from "react-icons/fa";
 
@@ -44,6 +45,11 @@ function AdminSidebar() {
           <FaChartLine />
           Analytics
         </NavLink>
+
+        <NavLink to="/admin/newsletter">
+  <FaEnvelope />
+  Newsletter
+</NavLink>
 
       </nav>
 

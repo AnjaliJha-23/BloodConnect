@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 
 const { protect } = require("../middleware/authMiddleware");
-
 const isAdmin = require("../middleware/adminMiddleware");
 
 const {
@@ -27,4 +26,5 @@ router.put("/users/:id/status", protect, isAdmin, toggleUserStatus);
 router.delete("/users/:id", protect, isAdmin, deleteUser);
 router.delete("/requests/:id", protect, isAdmin, deleteRequest);
 router.put("/requests/:id/complete", protect, isAdmin, completeRequest);
+
 module.exports = router;

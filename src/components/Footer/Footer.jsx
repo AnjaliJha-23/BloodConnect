@@ -1,3 +1,6 @@
+import { useState } from "react";
+import api from "../../services/api";
+import toast from "react-hot-toast";
 import {
   FaHeart,
   FaFacebookF,
@@ -16,6 +19,7 @@ import "./Footer.css";
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [email, setEmail] = useState("");
 
   const scrollToSection = (id) => {
     if (location.pathname === "/") {
@@ -36,12 +40,24 @@ const Footer = () => {
     }
   };
 
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
+  const handleNewsletterSubmit = async (e) => {
+  e.preventDefault();
 
-    // Backend Integration
-    console.log("Newsletter Subscribe");
-  };
+  try {
+    const res = await api.post("/newsletter/subscribe", {
+      email,
+    });
+
+    toast.success(res.data.message);
+    setEmail("");
+
+  } catch (err) {
+    toast.error(
+      err.response?.data?.message ||
+      "Something went wrong"
+    );
+  }
+};
 
   return (
     <footer className="footer">
@@ -185,10 +201,12 @@ const Footer = () => {
           >
 
             <input
-              type="email"
-              placeholder="Enter your email"
-              required
-            />
+  type="email"
+  placeholder="Enter your email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  required
+/>
 
             <button type="submit">
               <FaPaperPlane />

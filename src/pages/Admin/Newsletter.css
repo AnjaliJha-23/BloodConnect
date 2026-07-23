@@ -1,0 +1,71 @@
+.newsletter-page {
+  padding: 30px;
+  background: #f6f8fb;
+  min-height: 100vh;
+}
+
+.newsletter-header h2 {
+  margin-bottom: 25px;
+  color: #d32f2f;
+}
+
+.newsletter-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.newsletter-card {
+  background: white;
+  padding: 25px;
+  width: 220px;
+  border-radius: 15px;
+  box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+.newsletter-card h1 {
+  color: #d32f2f;
+  margin: 0;
+  font-size: 38px;
+}
+
+.newsletter-card p {
+  margin-top: 8px;
+  color: #666;
+}
+
+.newsletter-search {
+  width: 320px;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+.newsletter-table {
+  width: 100%;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  border-collapse: collapse;
+  box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+.newsletter-table th {
+  background: #d32f2f;
+  color: white;
+  padding: 16px;
+  text-align: left;
+}
+
+.newsletter-table td {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.newsletter-table tr:hover {
+  background: #fafafa;
+}

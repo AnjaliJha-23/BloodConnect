@@ -5,6 +5,8 @@ import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminRoute from "./components/ProtectedRoute/AdminRoute";
 import Users from "./pages/Admin/Users";
 import Requests from "./pages/Admin/Requests";
+import NewsletterList from "./pages/Admin/NewsletterList";
+
 
 import Profile from "./pages/Profile/Profile";
 import Home from "./pages/Home/Home";
@@ -50,7 +52,16 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+<Route
+  path="/admin/newsletter"
+  element={
+    <ProtectedRoute>
+      <AdminRoute>
+        <NewsletterList />
+      </AdminRoute>
+    </ProtectedRoute>
+  }
+/>
           <Route path="/login" element={<Login />} />
           <Route
             path="/profile"
@@ -99,6 +110,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+  path="/admin/newsletter"
+  element={
+    <ProtectedRoute>
+      <AdminRoute>
+        <NewsletterList />
+      </AdminRoute>
+    </ProtectedRoute>
+  }
+/>
           <Route
             path="/admin/requests"
             element={
