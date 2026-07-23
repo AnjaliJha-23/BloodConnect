@@ -185,7 +185,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               `navbar-link ${isActive ? "active-link" : ""}`
             }>
-            About Us
+            About
           </NavLink>
 
           <NavLink
@@ -193,7 +193,7 @@ const Navbar = () => {
             className={({ isActive }) =>
               `navbar-link ${isActive ? "active-link" : ""}`
             }>
-            Contact Us
+            Contact
           </NavLink>
 
           {/* Mobile Auth */}
@@ -202,7 +202,7 @@ const Navbar = () => {
               <>
                 {user?.role === "admin" && (
                   <Link to="/admin" className="btn btn-primary navbar-btn-sm">
-                    Admin Panel
+                    Admin
                   </Link>
                 )}
 
@@ -236,7 +236,7 @@ const Navbar = () => {
             <>
               {user?.role === "admin" && (
                 <Link to="/admin" className="btn btn-primary navbar-btn-sm">
-                  Admin Panel
+                  Admin
                 </Link>
               )}
 

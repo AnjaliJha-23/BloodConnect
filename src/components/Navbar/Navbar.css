@@ -18,27 +18,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 76px;
+  height: 72px;
+  padding: 0 12px;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--color-text-dark);
 }
 
 .navbar-logo-icon {
   color: var(--color-primary);
-  font-size: 1.5rem;
+  font-size: 1.35rem;
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 16px;
 }
 
 .navbar-link {
@@ -67,14 +68,16 @@
 .navbar-auth {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .navbar-btn-sm{
     padding:8px 18px;
-    border-radius:10px;
-    font-size:14px;
+    font-size:15px;
     font-weight:600;
+    border-radius:10px;
+    min-width:100px;
+    height:42px;
 }
 
 .navbar-toggle {
@@ -115,7 +118,7 @@
   .navbar-links-open {
     right: 0;
   }
-
+  
   .navbar-auth-mobile {
     display: flex;
     flex-direction: column;
@@ -130,11 +133,12 @@
 }
 .welcome-text{
 
+  font-size:14px;
   font-weight:600;
 
   color:var(--color-primary);
 
-  margin-right:8px;
+  margin-right:4px;
 
   white-space:nowrap;
 }
