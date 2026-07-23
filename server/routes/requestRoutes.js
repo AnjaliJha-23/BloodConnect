@@ -3,20 +3,17 @@ const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 
-
 const {
+  createRequest,
 
-    createRequest,
+  getRequests,
 
-    getRequests,
+  getMyRequests,
 
-    getMyRequests,
+  deleteRequest,
 
-    deleteRequest,
-
-    completeRequest,
-    respondToRequest
-
+  completeRequest,
+  respondToRequest,
 } = require("../controllers/requestController");
 
 router.post("/", protect, createRequest);

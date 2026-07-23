@@ -1,0 +1,31 @@
+.chatbot-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #ff4b5c, #ff2e63);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(255, 0, 0, 0.35);
+  transition: 0.3s;
+  z-index: 999;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.12);
+}
+
+.chatbot-button svg {
+  animation: float 2s infinite;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-4px);
+  }
+}
