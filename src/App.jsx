@@ -16,11 +16,12 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import RequestBlood from "./pages/RequestBlood/RequestBlood";
 import ProfileProtectedRoute from "./components/ProtectedRoutes/ProfileProtectedRoute";
 import MyRequests from "./pages/MyRequests/MyRequests";
-//import AdminProtectedRoute from "./components/ProtectedRoutes/AdminProtectedRoute";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-//import BloodRequests from "./pages/Admin/BloodRequests";
 import Analytics from "./pages/Admin/Analytics";
+
+
+import ContactMessages from "./pages/Admin/ContactMessages"; 
 
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
@@ -116,6 +117,18 @@ function App() {
               <ProtectedRoute>
                 <AdminRoute>
                   <Analytics />
+                </AdminRoute>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* 2. Add Route for Contact Messages */}
+          <Route
+            path="/admin/contact"
+            element={
+              <ProtectedRoute>
+                <AdminRoute>
+                  <ContactMessages />
                 </AdminRoute>
               </ProtectedRoute>
             }

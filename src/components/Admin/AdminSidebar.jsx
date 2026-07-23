@@ -4,13 +4,13 @@ import {
   FaUsers,
   FaTint,
   FaChartLine,
+  FaEnvelope,
   FaSignOutAlt,
 } from "react-icons/fa";
 
 import "./styles/AdminSidebar.css";
 
 function AdminSidebar() {
-
   const logout = () => {
     localStorage.clear();
     window.location.href = "/";
@@ -18,14 +18,12 @@ function AdminSidebar() {
 
   return (
     <aside className="admin-sidebar">
-
       <h2 className="admin-logo">
         BloodConnect
       </h2>
 
       <nav>
-
-        <NavLink to="/admin">
+        <NavLink to="/admin" end>
           <FaChartBar />
           Dashboard
         </NavLink>
@@ -45,6 +43,10 @@ function AdminSidebar() {
           Analytics
         </NavLink>
 
+        <NavLink to="/admin/contact">
+          <FaEnvelope />
+          Contact Messages
+        </NavLink>
       </nav>
 
       <button
@@ -54,7 +56,6 @@ function AdminSidebar() {
         <FaSignOutAlt />
         Logout
       </button>
-
     </aside>
   );
 }
