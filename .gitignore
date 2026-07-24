@@ -27,3 +27,7 @@ node_modules/
 *.njsproj
 *.sln
 *.sw?
+
+node_modules/
+.env
+server/.env
