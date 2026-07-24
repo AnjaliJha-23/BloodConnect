@@ -25,6 +25,9 @@ import ContactMessages from "./pages/Admin/ContactMessages";
 
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
+import ChatbotButton from "./components/ChatbotButton/ChatbotButton";
+import Chatbot from "./pages/Chatbot/Chatbot";
+
 function App() {
   const location = useLocation();
 
@@ -32,6 +35,8 @@ function App() {
     location.pathname === "/login" ||
     location.pathname === "/register" ||
     location.pathname.startsWith("/admin");
+  const hideChatbotButton =
+  location.pathname === "/chatbot";
 
   return (
     <>
@@ -143,11 +148,16 @@ function App() {
             }
           />
 
+          <Route path="/chatbot" element={<Chatbot />} />
+
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
       {!hideLayout && <Footer />}
+
+      {!hideLayout && !hideChatbotButton && <ChatbotButton />}
     </>
   );
 }
