@@ -3,6 +3,8 @@ import AdminLayout from "../../components/Admin/AdminLayout";
 import RequestTable from "../../components/Admin/RequestTable";
 import api from "../../services/api";
 import toast from "react-hot-toast";
+import Loader from "../../components/Common/Loader";
+import EmptyState from "../../components/Common/EmptyState";
 
 const REQUESTS_PER_PAGE = 5;
 
@@ -74,7 +76,7 @@ function Requests() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       toast.success("Request marked as completed");
@@ -89,29 +91,18 @@ function Requests() {
   const filteredRequests = useMemo(() => {
     return requests.filter(
       (request) =>
-        request.patientName
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        request.bloodGroup
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        request.hospital
-          .toLowerCase()
-          .includes(search.toLowerCase())
+        request.patientName.toLowerCase().includes(search.toLowerCase()) ||
+        request.bloodGroup.toLowerCase().includes(search.toLowerCase()) ||
+        request.hospital.toLowerCase().includes(search.toLowerCase()),
     );
   }, [requests, search]);
 
-  const totalPages = Math.ceil(
-    filteredRequests.length / REQUESTS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredRequests.length / REQUESTS_PER_PAGE);
 
   const indexOfLast = currentPage * REQUESTS_PER_PAGE;
   const indexOfFirst = indexOfLast - REQUESTS_PER_PAGE;
 
-  const currentRequests = filteredRequests.slice(
-    indexOfFirst,
-    indexOfLast
-  );
+  const currentRequests = filteredRequests.slice(indexOfFirst, indexOfLast);
 
   return (
     <AdminLayout>
@@ -133,7 +124,13 @@ function Requests() {
         </div>
 
         {loading ? (
-          <h3>Loading...</h3>
+          <Loader text="Loading..." />
+        ) : currentRequests.length === 0 ? (
+          <EmptyState
+            icon="🩸"
+            title="No Blood Requests Found"
+            message="There are no blood requests to display."
+          />
         ) : (
           <>
             <RequestTable
@@ -145,10 +142,7 @@ function Requests() {
             <div className="pagination">
               <button
                 disabled={currentPage === 1}
-                onClick={() =>
-                  setCurrentPage((prev) => prev - 1)
-                }
-              >
+                onClick={() => setCurrentPage((prev) => prev - 1)}>
                 Previous
               </button>
 
@@ -157,14 +151,8 @@ function Requests() {
               </span>
 
               <button
-                disabled={
-                  currentPage === totalPages ||
-                  totalPages === 0
-                }
-                onClick={() =>
-                  setCurrentPage((prev) => prev + 1)
-                }
-              >
+                disabled={currentPage === totalPages || totalPages === 0}
+                onClick={() => setCurrentPage((prev) => prev + 1)}>
                 Next
               </button>
             </div>

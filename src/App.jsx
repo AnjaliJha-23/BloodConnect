@@ -7,7 +7,6 @@ import Users from "./pages/Admin/Users";
 import Requests from "./pages/Admin/Requests";
 import NewsletterList from "./pages/Admin/NewsletterList";
 
-
 import Profile from "./pages/Profile/Profile";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
@@ -22,8 +21,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Analytics from "./pages/Admin/Analytics";
 
-
-import ContactMessages from "./pages/Admin/ContactMessages"; 
+import ContactMessages from "./pages/Admin/ContactMessages";
 
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
@@ -53,16 +51,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-<Route
-  path="/admin/newsletter"
-  element={
-    <ProtectedRoute>
-      <AdminRoute>
-        <NewsletterList />
-      </AdminRoute>
-    </ProtectedRoute>
-  }
-/>
           <Route path="/login" element={<Login />} />
           <Route
             path="/profile"
@@ -112,15 +100,15 @@ function App() {
             }
           />
           <Route
-  path="/admin/newsletter"
-  element={
-    <ProtectedRoute>
-      <AdminRoute>
-        <NewsletterList />
-      </AdminRoute>
-    </ProtectedRoute>
-  }
-/>
+            path="/admin/newsletter"
+            element={
+              <ProtectedRoute>
+                <AdminRoute>
+                  <NewsletterList />
+                </AdminRoute>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/admin/requests"
             element={

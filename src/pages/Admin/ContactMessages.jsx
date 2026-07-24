@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import './Admin.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import "./Admin.css";
 import AdminLayout from "../../components/Admin/AdminLayout";
+import Loader from "../../components/Common/Loader";
 
 const ContactMessages = () => {
   const [messages, setMessages] = useState([]);
@@ -11,11 +12,11 @@ const ContactMessages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/contact', {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:5000/api/contact", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         // Handles both { success: true, messages: [...] } and array responses
@@ -25,8 +26,8 @@ const ContactMessages = () => {
           setMessages(response.data);
         }
       } catch (error) {
-        console.error('Error fetching messages:', error);
-        toast.error('Failed to load contact messages');
+        console.error("Error fetching messages:", error);
+        toast.error("Failed to load contact messages");
       } finally {
         setLoading(false);
       }
@@ -41,7 +42,7 @@ const ContactMessages = () => {
         <h2>Contact Messages</h2>
 
         {loading ? (
-          <p className="loading-text">Loading messages...</p>
+          <Loader text="Loading messages..." />
         ) : messages.length === 0 ? (
           <p className="no-requests">No messages found.</p>
         ) : (
@@ -65,12 +66,12 @@ const ContactMessages = () => {
                     <td>
                       <a href={`mailto:${msg.email}`}>{msg.email}</a>
                     </td>
-                    <td>{msg.subject || 'N/A'}</td>
+                    <td>{msg.subject || "N/A"}</td>
                     <td>{msg.message}</td>
                     <td>
                       {msg.createdAt
                         ? new Date(msg.createdAt).toLocaleDateString()
-                        : 'N/A'}
+                        : "N/A"}
                     </td>
                   </tr>
                 ))}

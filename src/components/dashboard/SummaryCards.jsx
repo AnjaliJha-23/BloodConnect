@@ -1,47 +1,45 @@
 import "./SummaryCards.css";
 import {
   FaTint,
-  FaMapMarkerAlt,
   FaClipboardList,
   FaHeartbeat,
+  FaBell,
 } from "react-icons/fa";
 
-function SummaryCards({ user, requestsMade }) {
+function SummaryCards({ user, requestsMade, activeRequests }) {
   return (
     <div className="summary-grid">
-
       <div className="summary-card">
         <h3>
-            <FaTint />
-            Blood Group
+          <FaTint />
+          Blood Group
         </h3>
         <p>{user.bloodGroup || "N/A"}</p>
       </div>
 
       <div className="summary-card">
         <h3>
-            <FaMapMarkerAlt />
-            State
+          <FaBell />
+          Active Requests
         </h3>
-        <p>{user.state || "N/A"}</p>
+        <p>{activeRequests}</p>
       </div>
 
       <div className="summary-card">
-       <h3>
-            <FaClipboardList />
-            Requests Made
+        <h3>
+          <FaClipboardList />
+          Requests Made
         </h3>
         <p>{requestsMade}</p>
       </div>
 
       <div className="summary-card">
         <h3>
-            <FaHeartbeat />
-            Availability
+          <FaHeartbeat />
+          Availability
         </h3>
         <p>{user.available ? "Available" : "Unavailable"}</p>
       </div>
-
     </div>
   );
 }

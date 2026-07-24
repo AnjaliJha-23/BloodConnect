@@ -3,6 +3,8 @@ import { State, City } from "country-state-city";
 import api from "../../services/api";
 import "./BloodRequests.css";
 import toast from "react-hot-toast";
+import { FaHeartbeat } from "react-icons/fa";
+import Loader from "../../components/Common/Loader";
 
 const COUNTRY_CODE = "IN"; // India
 
@@ -176,15 +178,15 @@ function BloodRequests() {
   };
 
   if (loading) {
-    return <h2 className="loading-text">Loading Requests...</h2>;
+    return <Loader text="Loading Requests..." />;
   }
 
-  const handleDonate = async (request) => {
+  const handleDonate = async () => {
     try {
       const token = localStorage.getItem("token");
 
       const res = await api.put(
-        `/requests/${request._id}/respond`,
+        `/requests/${selectedRequest._id}/respond`,
         {},
         {
           headers: {
@@ -193,15 +195,12 @@ function BloodRequests() {
         },
       );
 
-      alert(res.data.message);
+      toast.success(res.data.message);
 
       setSelectedRequest(null);
+      
     } catch (err) {
-      console.log(err);
-      console.log(err.response);
-      console.log(err.response?.data);
-
-      alert(err.response?.data?.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -456,10 +455,9 @@ function BloodRequests() {
                   ✓ Request Completed
                 </span>
               ) : (
-                <button
-                  className="donate-btn"
-                  onClick={() => handleDonate(selectedRequest)}>
-                  ❤️ I Can Donate
+                <button className="donate-btn" onClick={handleDonate}>
+                  <FaHeartbeat className="donate-icon" />
+                  <span>I Can Donate</span>
                 </button>
               )}
             </div>

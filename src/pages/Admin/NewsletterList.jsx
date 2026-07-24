@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import "./Newsletter.css";
+import "./NewsletterList.css";
+import AdminLayout from "../../components/Admin/AdminLayout";
 
 function NewsletterList() {
   const [subscribers, setSubscribers] = useState([]);
@@ -24,12 +25,16 @@ function NewsletterList() {
   );
 
   return (
+  <AdminLayout>
+
     <div className="newsletter-page">
+
       <div className="newsletter-header">
         <h2>📧 Newsletter Subscribers</h2>
       </div>
 
       <div className="newsletter-top">
+
         <div className="newsletter-card">
           <h1>{subscribers.length}</h1>
           <p>Total Subscribers</p>
@@ -42,9 +47,11 @@ function NewsletterList() {
           onChange={(e) => setSearch(e.target.value)}
           className="newsletter-search"
         />
+
       </div>
 
       <table className="newsletter-table">
+
         <thead>
           <tr>
             <th>Email</th>
@@ -53,6 +60,7 @@ function NewsletterList() {
         </thead>
 
         <tbody>
+
           {filteredSubscribers.map((subscriber) => (
             <tr key={subscriber._id}>
               <td>{subscriber.email}</td>
@@ -67,10 +75,15 @@ function NewsletterList() {
               <td colSpan="2">No subscribers found.</td>
             </tr>
           )}
+
         </tbody>
+
       </table>
+
     </div>
-  );
+
+  </AdminLayout>
+);
 }
 
 export default NewsletterList;

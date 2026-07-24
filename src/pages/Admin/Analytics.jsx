@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../../components/Admin/AdminLayout";
 import StatCard from "../../components/Admin/StatCard";
 import api from "../../services/api";
+import Loader from "../../components/Common/Loader";
 
 import {
   ResponsiveContainer,
@@ -17,12 +18,7 @@ import {
   Legend,
 } from "recharts";
 
-import {
-  FaUsers,
-  FaTint,
-  FaHeartbeat,
-  FaCheckCircle,
-} from "react-icons/fa";
+import { FaUsers, FaTint, FaHeartbeat, FaCheckCircle } from "react-icons/fa";
 
 import "./Analytics.css";
 
@@ -59,21 +55,19 @@ function Analytics() {
     }
   };
 
-  if (!data)
+  if (!data) {
     return (
       <AdminLayout>
-        <h2>Loading...</h2>
+        <Loader text="Loading Analytics..." />
       </AdminLayout>
     );
+  }
 
   return (
     <AdminLayout>
-      <h1 className="analytics-title">
-        Analytics Dashboard
-      </h1>
+      <h1 className="analytics-title">Analytics Dashboard</h1>
 
       <div className="analytics-cards">
-
         <StatCard
           title="Total Users"
           value={data.summary.totalUsers}
@@ -101,19 +95,13 @@ function Analytics() {
           icon={<FaCheckCircle />}
           color="#ef4444"
         />
-
       </div>
 
       <div className="charts-grid">
-
         <div className="chart-card">
-
           <h3>Blood Group Distribution</h3>
 
-          <ResponsiveContainer
-            width="100%"
-            height={320}
-          >
+          <ResponsiveContainer width="100%" height={320}>
             <BarChart data={data.bloodGroups}>
               <CartesianGrid strokeDasharray="3 3" />
 
@@ -123,60 +111,39 @@ function Analytics() {
 
               <Tooltip />
 
-              <Bar
-                dataKey="count"
-                fill="#ef4444"
-                radius={[8, 8, 0, 0]}
-              />
+              <Bar dataKey="count" fill="#ef4444" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-
         </div>
 
         <div className="chart-card">
-
           <h3>Request Status</h3>
 
-          <ResponsiveContainer
-            width="100%"
-            height={320}
-          >
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
-
               <Pie
                 data={data.requestStatus}
                 dataKey="count"
                 nameKey="_id"
                 outerRadius={110}
-                label
-              >
+                label>
                 {data.requestStatus.map((entry, index) => (
-                  <Cell
-                    key={index}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
 
               <Tooltip />
 
               <Legend />
-
             </PieChart>
           </ResponsiveContainer>
-
         </div>
-
       </div>
 
       <div className="chart-card">
-
         <h3>Monthly User Registrations</h3>
 
-        <ResponsiveContainer
-          width="100%"
-          height={350}
-        >
+        <ResponsiveContainer width="100%" height={350}>
           <BarChart data={data.monthlyUsers}>
             <CartesianGrid strokeDasharray="3 3" />
 
@@ -186,17 +153,10 @@ function Analytics() {
 
             <Tooltip />
 
-            <Bar
-              dataKey="count"
-              fill="#3b82f6"
-              radius={[8, 8, 0, 0]}
-            />
-
+            <Bar dataKey="count" fill="#3b82f6" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
-
       </div>
-
     </AdminLayout>
   );
 }

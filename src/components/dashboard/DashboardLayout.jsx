@@ -10,6 +10,7 @@ import "./DashboardLayout.css";
 
 function DashboardLayout({ user, profileComplete }) {
   const [requestsMade, setRequestsMade] = useState(0);
+  const [activeRequests, setActiveRequests] = useState(0);
 
   useEffect(() => {
     const fetchMyRequests = async () => {
@@ -23,6 +24,13 @@ function DashboardLayout({ user, profileComplete }) {
         });
 
         setRequestsMade(res.data.length);
+        const allRequests = await api.get("/requests");
+
+        const openRequests = allRequests.data.filter(
+          (req) => req.status === "Open",
+        );
+
+        setActiveRequests(openRequests.length);
       } catch (err) {
         console.error("Failed to fetch request count:", err);
       }
@@ -39,11 +47,40 @@ function DashboardLayout({ user, profileComplete }) {
         <SummaryCards
           user={user}
           requestsMade={requestsMade}
+          activeRequests={activeRequests}
         />
 
-        <QuickActions
-          profileComplete={profileComplete}
-        />
+        <div className="dashboard-status">
+          <div className="status-card">
+            <h3>🎯 Quick Status</h3>
+
+            <ul>
+              <li>
+                Profile :
+                <strong>
+                  {profileComplete ? " Complete ✅" : " Incomplete ⚠️"}
+                </strong>
+              </li>
+
+              <li>
+                Blood Group :<strong> {user.bloodGroup || "Not Added"}</strong>
+              </li>
+
+              <li>
+                Availability :
+                <strong>
+                  {user.available ? " Available 🟢" : " Unavailable 🔴"}
+                </strong>
+              </li>
+
+              <li>
+                Requests Made :<strong> {requestsMade}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <QuickActions profileComplete={profileComplete} />
 
         <DonationTip />
       </div>

@@ -5,7 +5,7 @@ import { State, City } from "country-state-city";
 import api from "../../services/api";
 import "./SearchSection.css";
 import toast from "react-hot-toast";
-
+import Loader from "../../components/Common/Loader";
 
 import BloodGroups from "../BloodGroups/BloodGroups";
 
@@ -84,8 +84,7 @@ const SearchSection = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.6 }}
-        >
+          transition={{ duration: 0.6 }}>
           <h2 className="search-title">Find Blood Donor</h2>
 
           <form className="search-form" onSubmit={handleSearch}>
@@ -96,8 +95,7 @@ const SearchSection = () => {
                 <select
                   id="bloodGroup"
                   value={bloodGroup}
-                  onChange={(e) => setBloodGroup(e.target.value)}
-                >
+                  onChange={(e) => setBloodGroup(e.target.value)}>
                   <option value="">Select Blood Group</option>
                   {BLOOD_GROUPS.map((bg) => (
                     <option key={bg} value={bg}>
@@ -113,8 +111,7 @@ const SearchSection = () => {
                 <select
                   id="state"
                   value={selectedStateCode}
-                  onChange={handleStateChange}
-                >
+                  onChange={handleStateChange}>
                   <option value="">Select State</option>
                   {indianStates.map((s) => (
                     <option key={s.isoCode} value={s.isoCode}>
@@ -131,8 +128,7 @@ const SearchSection = () => {
                   id="city"
                   value={cityName}
                   onChange={(e) => setCityName(e.target.value)}
-                  disabled={!selectedStateCode}
-                >
+                  disabled={!selectedStateCode}>
                   <option value="">
                     {selectedStateCode ? "Select City" : "Select State First"}
                   </option>
@@ -165,13 +161,20 @@ const SearchSection = () => {
             </div>
           </form>
 
-          {loading && <h3 className="status-text">Searching...</h3>}
+          {loading ? (
+            <Loader text="Searching..." />
+          ) : hasSearched && donors.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">🔍</div>
 
-          {hasSearched && !loading && donors.length === 0 && (
-            <p className="no-results">No donors found.</p>
-          )}
+              <h2>No Donors Found</h2>
 
-          {donors.length > 0 && (
+              <p>
+                We couldn't find any matching donors for your search. Try
+                changing the blood group, city, or area.
+              </p>
+            </div>
+          ) : donors.length > 0 ? (
             <div className="results-container">
               <h2 className="results-title">Available Donors</h2>
 
@@ -184,19 +187,15 @@ const SearchSection = () => {
                       <p>
                         <strong>Blood Group:</strong> {donor.bloodGroup}
                       </p>
-
                       <p>
                         <strong>Phone:</strong> {donor.phone}
                       </p>
-
                       <p>
                         <strong>State:</strong> {donor.state || "N/A"}
                       </p>
-
                       <p>
                         <strong>City:</strong> {donor.city || "N/A"}
                       </p>
-
                       <p>
                         <strong>Area:</strong> {donor.area || "N/A"}
                       </p>
@@ -208,12 +207,10 @@ const SearchSection = () => {
                         textDecoration: "none",
                         display: "block",
                         marginTop: "15px",
-                      }}
-                    >
+                      }}>
                       <button
                         className="btn btn-outline-primary"
-                        style={{ width: "100%" }}
-                      >
+                        style={{ width: "100%" }}>
                         Contact
                       </button>
                     </a>
@@ -225,8 +222,7 @@ const SearchSection = () => {
                 <div className="pagination">
                   <button
                     onClick={() => setCurrentPage((prev) => prev - 1)}
-                    disabled={currentPage === 1}
-                  >
+                    disabled={currentPage === 1}>
                     Previous
                   </button>
 
@@ -236,14 +232,13 @@ const SearchSection = () => {
 
                   <button
                     onClick={() => setCurrentPage((prev) => prev + 1)}
-                    disabled={currentPage === totalPages}
-                  >
+                    disabled={currentPage === totalPages}>
                     Next
                   </button>
                 </div>
               )}
             </div>
-          )}
+          ) : null}
         </motion.div>
 
         {/* Embedded Interactive 3D Blood Group Cards */}

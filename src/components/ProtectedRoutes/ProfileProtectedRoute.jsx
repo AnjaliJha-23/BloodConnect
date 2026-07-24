@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import api from "../../services/api";
+import Loader from "../../components/Common/Loader";
 
 function ProfileProtectedRoute({ children }) {
 
@@ -57,8 +58,8 @@ function ProfileProtectedRoute({ children }) {
   }, []);
 
   if (loading) {
-    return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
-  }
+  return <Loader text="Loading..." />;
+}
 
   if (!allowed) {
     return <Navigate to="/profile" />;

@@ -63,3 +63,73 @@
     background:#555;
 
 }
+.response-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.response-btn:hover {
+  background: #1d4ed8;
+}
+
+.response-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.response-modal {
+  width: 500px;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.response-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 12px 0;
+}
+.empty-state{
+
+    text-align:center;
+
+    padding:70px 20px;
+
+    background:white;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.05);
+
+}
+
+.empty-state h2{
+
+    color:#E53935;
+
+    margin-bottom:10px;
+
+}
+
+.empty-state p{
+
+    color:#64748B;
+
+    font-size:16px;
+
+}

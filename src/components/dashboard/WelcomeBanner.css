@@ -1,49 +1,70 @@
 .welcome-banner{
-    background:linear-gradient(135deg,#E53935,#C62828);
+    background: linear-gradient(135deg,#E53935,#C62828);
+    color: #fff;
 
-    color:white;
+    border-radius: 24px;
 
-    border-radius:20px;
+    padding: 40px;
 
-    padding:35px;
+    margin-bottom: 35px;
 
-    margin-bottom:30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    display:flex;
+    box-shadow: 0 15px 40px rgba(229,57,53,.25);
 
-    justify-content:space-between;
+    overflow: hidden;
+    position: relative;
+}
 
-    align-items:center;
-
-    box-shadow:0 10px 25px rgba(229,57,53,.25);
+/* Decorative circle */
+.welcome-banner::before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    top:-70px;
+    right:-70px;
 }
 
 .welcome-banner h1{
     margin:0;
-
-    font-size:34px;
+    font-size:36px;
+    font-weight:700;
 }
 
 .welcome-banner p{
-
-    margin-top:12px;
+    margin-top:14px;
+    max-width:620px;
 
     opacity:.95;
 
     font-size:17px;
 
-    line-height:1.6;
+    line-height:1.7;
 }
 
 .banner-date{
-    font-weight:600;
-    background: rgba(255,255,255,.15);
-    padding:12px 18px;
-    border-radius:12px;
+    position:relative;
+    z-index:2;
 
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    padding:14px 22px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    white-space:nowrap;
 }
+
 @media(max-width:768px){
 
 .welcome-banner{
@@ -52,13 +73,31 @@
 
     align-items:flex-start;
 
-    gap:20px;
+    text-align:left;
+
+    padding:24px;
+
+    gap:18px;
 
 }
 
 .welcome-banner h1{
 
-    font-size:28px;
+    font-size:26px;
+
+}
+
+.welcome-banner p{
+
+    font-size:15px;
+
+}
+
+.banner-date{
+
+    width:100%;
+
+    text-align:center;
 
 }
 
